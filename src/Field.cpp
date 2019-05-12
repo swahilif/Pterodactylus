@@ -1,5 +1,5 @@
 #include "../include/runtime/Field.h"
-#include "../include/runtime/ClassFile.h"
+#include "../include/types/ClassFile.h"
 
 UShort FieldEntry::GetByte() {return byte;}
 

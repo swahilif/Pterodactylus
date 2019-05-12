@@ -3,7 +3,8 @@
 #include <string>
 #include <map>
 using std::string;
-
+#ifndef FIELD_ENTRY_DEF
+#define FIELD_ENTRY_DEF
 class FieldEntry {
     string name;
     string descriptor;
@@ -79,3 +80,4 @@ public:
 };
 
 bool MakeFieldTable(std::map<string, int> &ftp, pClass *pkl);
+#endif

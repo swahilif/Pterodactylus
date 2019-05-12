@@ -15,7 +15,15 @@ enum types {CONS_UTF8, CONS_INTEGER, CONS_FLOAT, CONS_LONG, CONS_DOUBLE, CONS_ST
     CONSTANT_INVOKE_DYNAMIC, CONS_METATYPE, PUBLIC, PRIVATE, PROTECTED, ATTR_META, ATTR_CODE, ATTR_LINENUMBER, ATTR_SOURCEFILE
 } type;
 
-class CONSTANT_METATYPE;
+class CONSTANT_METATYPE{
+public:
+    virtual types get_instance_type()=0;
+    virtual void* get_value()=0;
+    virtual void* get_name_index()=0;
+    virtual void* get_binary_info()=0;
+};
+
+//class CONSTANT_METATYPE;
 class EXCEPTIONINFO;
 class ATTRIBUTEINFO;
 class FIELDINFO;

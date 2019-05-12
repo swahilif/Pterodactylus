@@ -21,45 +21,46 @@ public:
 };
 
 */
-
+#ifndef CONSTANT_POOL_DEF
+#define CONSTANT_POOL_DEF
 class ConstantPool;
 
 class ConstantPoolMetaType {
 protected:
     int instance_type;
 public:
-    int GetInstanceType() {return instance_type;}
-    virtual void* GetValue() {return NULL;}
-    virtual NAT GetNameAndType() {return "";}
-    virtual ~ConstantPoolMetaType() {}
-    virtual int resolved(ConstantPool*) {};
+    int GetInstanceType() ;//{return instance_type;}
+    virtual void* GetValue() ;//{return NULL;}
+    virtual NAT GetNameAndType();// {return "";}
+    virtual ~ConstantPoolMetaType(); 
+    virtual int resolved(ConstantPool*) ;
 };
 
 class ConstantPoolRefType: public ConstantPoolMetaType {
     NAT nat;
     UShort class_index, entry_index;
 public:
-    ConstantPoolRefType(UShort _class_index, UShort _entry_index, int _instance_type) {
+    ConstantPoolRefType(UShort _class_index, UShort _entry_index, int _instance_type) ;/*{
         instance_type = _instance_type; 
         class_index = _class_index;
         entry_index = _entry_index;
         nat = "";
-    }
+    }*/
 
     int resolved(ConstantPool*);
     
-    NAT GetNameAndType() {
+    NAT GetNameAndType();/* {
         if (nat == "") {
             return ""; 
         } 
         return nat;
-    }
+    }*/
 };
 
 class ConstantPoolValueType: public ConstantPoolMetaType {
     void* value;
 public:
-    ConstantPoolValueType(void* _value, int _instant_type) {
+    ConstantPoolValueType(void* _value, int _instant_type) ;/*{
         instance_type = _instant_type;
         if (instance_type == CONS_FLOAT) 
             value = new float(*(float*)_value);
@@ -75,35 +76,35 @@ public:
             value = new NAT(*(NAT*)_value);
         else if (instance_type == CONS_CLASS)
             value = new UShort(*(UShort*)_value);
-    }
+    }*/
 
-    ~ConstantPoolValueType() {
+    ~ConstantPoolValueType() ;/*{
         delete value;
-    }
-    void* GetValue() { return value; }
+    }*/
+    void* GetValue() ;//{ return value; }
 };
 
 class ConstantPoolNAT: public ConstantPoolMetaType {
     UInt name_index, descriptor_index;
     string nat;
 public:
-    ConstantPoolNAT(UInt _name_index, UInt _descriptor_index) {
+    ConstantPoolNAT(UInt _name_index, UInt _descriptor_index) ;/*{
         name_index = _name_index;
         descriptor_index = _descriptor_index;
         nat = "";
-    }
+    }*/
 
     int resolved(ConstantPool* pcp);
-    NAT GetNameAndType() {
+    NAT GetNameAndType();/* {
         return nat;
-    }
+    }*/
 };
 
 class ConstantPool {
     ConstantPoolMetaType** cpm;
     UShort constant_pool_count;
 public:
-    ConstantPool(CONSTANT_METATYPE** pcm, UShort ConstantPoolCount) {
+    ConstantPool(CONSTANT_METATYPE** pcm, UShort ConstantPoolCount) ; /*{
         constant_pool_count = ConstantPoolCount;
         cpm = new ConstantPoolMetaType*[constant_pool_count];
         for (int i = 0; i < ConstantPoolCount; i++) {
@@ -126,22 +127,23 @@ public:
                 // Unimplemented
             }
         }
-    }
+    } */
 
-    ~ConstantPool() {
+    ~ConstantPool();/* {
         if (cpm != NULL) {
             for (int i=1; i<constant_pool_count; i++) 
                 if (cpm[i] != NULL) delete cpm[i];
             delete[] cpm;
         }
-    }
+    }*/
 
-    ConstantPoolMetaType* GetConstantPoolItem(int index) {
+    ConstantPoolMetaType* GetConstantPoolItem(int index); /* {
         assert(index >= 1 && index < constant_pool_count);
         return cpm[index];
-    }
+    }*/
 };
-
+#endif
+/*
 int ConstantPoolRefType::resolved(ConstantPool* pcp) { // resolve the index form into string form 
     auto* pci = pcp->GetConstantPoolItem(class_index);
     auto* pei = pcp->GetConstantPoolItem(entry_index);
@@ -167,4 +169,4 @@ int ConstantPoolNAT::resolved(ConstantPool* pcp) {
 
     this->nat = *(NAT*)pci->GetValue() + ":" + *(NAT*)pei->GetValue();
     return 1;
-}
+}*/

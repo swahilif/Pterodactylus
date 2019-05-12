@@ -1,10 +1,12 @@
 // 这个文件主要实现将静态数据结构加载为虚拟机的运行时数据结构
 // 并处理出每个类对应的字段表和虚函数表,以实现多态功能
 
-#include "ClassFile.h"
+#include "../types/ClassFile.h"
 #include <map>
 #include <string>
 
+#ifndef CLASSLOADER_DEF 
+#define CLASSLOADER_DEF 
 namespace ClassLoader {
 
     map<string, int> nameMap;
@@ -15,5 +17,5 @@ namespace ClassLoader {
     int LoadClass(class_attribute*); 
     pClass* findLoadedClass(string class_name);
 }
-
+#endif 
 

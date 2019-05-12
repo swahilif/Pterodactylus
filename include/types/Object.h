@@ -8,16 +8,19 @@ class Object {
     ObjectHeader *header;
     void* data;
 public:
-    Object(pClass *pkl, UInt len) {
+    Object(pClass *pkl, UInt len) ; /*{
         header = new ObjectHeader(pkl, len);
         data = new char[header->length];
-    }
+    } */
 
-    ~Object() {
+    ~Object() ;/*
         delete data;
         delete header;
-    }
-    
+    } */
+
+    pClass* getClass() ;
+    UInt getTotalLength() ;
+    void* getField(std::string nat) ;
 };
 
 

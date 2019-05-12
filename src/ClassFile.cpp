@@ -1,12 +1,13 @@
 #include "../include/types/ClassFile.h"
 #include "../runtime/Field.h"
+#include "../include/types/ClassLoader.h"
 
-pClass::pClass(class_file* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
+pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
         ACC_ABSTRACT(pcf->ACC_ABSTRACT), ACC_SYNTHETIC(pcf->ACC_SYNTHETIC), ACC_ANNOTATION(pcf->ACC_ANNOTATION), ACC_ENUM(pcf->ACC_ENUM) {
             magic = pcf->magic;
             minor_version = pcf->minor_version;
             major_version = pcf->major_version;
-            this_class = pcf->this_class;
+            //this_class = pcf->this_class;
             constant_pool_count = pcf->constant_pool_count;
 
             field_count = pcf->field_count;
@@ -51,7 +52,8 @@ int pClass::MakeStaticMethodTable() {
     return smtp == NULL;
 }
 
-~pClass::pClass() {
+ConstantPoolMetaType* pClass::GetConstantPoolItem(int pl_index) {return pcp->GetConstantPoolItem(pl_index);}
+pClass::~pClass() {
     if (vtp != NULL) delete vtp;
     if (smtp != NULL) delete smtp;
     if (arrMethod != NULL) { 
@@ -65,9 +67,11 @@ int pClass::MakeStaticMethodTable() {
         delete[] arrField;
     }
 }
+
 pClass::pClass() {
 
 }
+
 UBoolean pClass::is_loaded() {
-    return true;
+    return this->is_loaded_;
 }

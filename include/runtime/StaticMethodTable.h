@@ -7,14 +7,14 @@ using std::map;
 // [ClassName] StaticMethodTable
 // 处理所有静态函数和私有函数
 
-class StaticMethodTable {
-    using MapContainerType = map<string, int>;
-    using ContainerType = vector<MethodEntry*>;
+using MapContainerType = map<string, int>;
+using ContainerType = vector<MethodEntry*>;
 
+class StaticMethodTable {
     MapContainerType nameMap;
     ContainerType entryList;
 public:
-    StaticMethodTable(pClass* pkl) {
+    StaticMethodTable(pClass* pkl) ;/*{
         for (int i=0; i<pkl->method_count; i++) {
             auto *it = pkl->arrMethod[i];
             if (it->GetAccessFlags("ACC_STATIC") || it->GetAccessFlags("ACC_PRIVATE")) {
@@ -22,11 +22,11 @@ public:
                 nameMap[it->GetNameAndDescriptor()] = entryList.length() - 1;
             }
         }
-    }
+    }*/
 
-    MethodEntry* GetStaticMethodEntry(string nat) {
+    MethodEntry* GetStaticMethodEntry(string nat) ;/*{
         if (nameMap.count(nat)) 
             return entryList[nameMap[nat]];
         return NULL; // 返回NULL，使得Resolve从父类继续解析
-    }
+    }*/
 };

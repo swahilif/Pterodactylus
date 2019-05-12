@@ -1,3 +1,5 @@
+#ifndef METHODPOOL_DEF
+#define METHODPOOL_DEF
 #include <memory>
 #include <vector>
 #include <stack>
@@ -17,8 +19,8 @@ class PureCode {
     UInt code_length;
     UShort attributes_count;
 public:
-	PureCode(): current_pos(0) {code_length = 0; pData = NULL;}
-    PureCode(CODE* pCode) {
+	PureCode(); //current_pos(0) {code_length = 0; pData = NULL;}
+    PureCode(CODE* pCode); /*{
         pData = new HexCode[pCode->code_length + 1];
         current_pos = 0;
 
@@ -29,15 +31,15 @@ public:
 
         for (auto x = 0; x < code_length; x++)
             *(pData+x) = *(pCode->code+x);
-    }
+    }*/
 
-    UShort GetMaxStack() {return max_stack;}
-    UShort GetMaxLocals() {return max_locals;}
-    UInt GetCodeLength() {return code_length;}
+    UShort GetMaxStack(); //{return max_stack;}
+    UShort GetMaxLocals(); //{return max_locals;}
+    UInt GetCodeLength(); //{return code_length;}
 
-    ~PureCode() {delete[] pData;}
+    ~PureCode(); //{delete[] pData;}
 
-    HexCode GetNextCode() {
+    HexCode GetNextCode(); /*{
         try {
             if (current_pos + 1 >= code_length)
                 throw "Access denied! The hex code read exceeds the maximum length.";
@@ -49,8 +51,9 @@ public:
         }
         return 0;
     }
+    */
 
-    void SetCurrentPos(UShort index) {
+    void SetCurrentPos(UShort index);/* {
         try {
             if (index >= code_length)
                 throw "Access denied! The hex code read exceeds the maximum length.";
@@ -62,13 +65,13 @@ public:
             cout << error_info << endl;
 #endif
         }
-    }
+    } */
 
-    HexCode GetCurrentPos() const {
+    HexCode GetCurrentPos() const; /* {
         return current_pos;
-    }
+    } */
     
-    HexCode GetIndexCode(UShort index) const{
+    HexCode GetIndexCode(UShort index) const ;/*{
         try {
             if (index >= code_length)
                 throw "Access denied! The hex code read exceeds the maximum length.";
@@ -81,34 +84,34 @@ public:
 #endif
             return 0;
         }
-    }
+    } */
 };
 
 // [ClassName] PureCodePool
 // 管理PureCode用的索引结构
+using DataType = PureCode*;
+using PureContainer = std::vector<PureCode*>;
+using PureVacantIndexContainer = std::stack<UInt>;
 class PureCodePool {
 public:
-    using DataType = PureCode*;
-    using PureContainer = std::vector<PureCode*>;
-    using PureVacantIndexContainer = std::stack<UInt>;
-    PureCodePool(UInt poolLength) {
+    PureCodePool(UInt poolLength); /* {
         CodePool.resize(poolLength);
         PoolLength = poolLength;
         for (auto k = poolLength - 1; k >= 1; k--) {
             VacantIndexStack.push(k);
         }
-    }
+    } */
 
-    UInt Reserve(CODE* pCode) { // UInt _codeLength, UBytePtr _codeString) {
+    UInt Reserve(CODE* pCode) ;/* { // UInt _codeLength, UBytePtr _codeString) {
         if (VacantIndexStack.empty()) // 分配PureCode失败
             return 0;
         UInt reserved_slot = VacantIndexStack.top();
         VacantIndexStack.pop();
         CodePool[reserved_slot] = new PureCode(pCode); //_codeLength, _codeString);
         return reserved_slot;
-    }
+    }*/
 
-    DataType Access(UInt access_slot) {
+    DataType Access(UInt access_slot); /* {
         try {
             if (access_slot >= PoolLength)
                 throw "[PureCodePool] Invalid Access!";
@@ -119,23 +122,23 @@ public:
 #endif
             return NULL;
         }        
-    }
+    } */
 
     // [MethodName] PureCodePool::Release
     // 返回是否释放成功
-    StatusCode Release(UInt released_slot) {
+    StatusCode Release(UInt released_slot); /* {
         if (CodePool[released_slot] == NULL)
             return 0;
 
         delete CodePool[released_slot];
         VacantIndexStack.push(released_slot);
         return 1;
-    }
+    } */
 
-    ~PureCodePool() {
+    ~PureCodePool(); /*{
         for (auto k = 0; k < PoolLength; k++)
             Release(k);
-    }
+    } */
 private:
     PureContainer CodePool;
     UInt PoolLength;
@@ -163,7 +166,7 @@ class MethodEntry {
     UShort attribute_count;
     UInt   method_res_pos;
 public:
-    bool GetAccessFlags(string flag) {
+    bool GetAccessFlags(string flag); /* {
         if (flag == "ACC_STATIC")
             return ACC_STATIC;
         if (flag == "ACC_FINAL")
@@ -177,11 +180,11 @@ public:
         if (flag == "ACC_NATIVE")
             return ACC_NATIVE;
         return false;
-    }
+    } */
 
-    MethodEntry() {}
+    MethodEntry(); //{}
 
-    MethodEntry(METHODINFO* pmi, class_attribute* pkl) {
+    MethodEntry(METHODINFO* pmi, class_attribute* pkl); /* {
         ACC_PUBLIC = pmi->ACC_PUBLIC;
         ACC_PRIVATE = pmi->ACC_PRIVATE;
         ACC_PROTECTED = pmi->ACC_PROTECTED;
@@ -204,11 +207,12 @@ public:
 
         attribute_count = pmi->attributes_count;
         method_res_pos = GenCodePool.Reserve((CODE*)pmi->attributes[pmi->get_code_index()]); 
-    }
+    } */
     
-    NAT GetName() {return name;}
-    NAT GetDescriptor() {return descriptor;}
-    NAT GetNameAndDescriptor() {return name_and_descriptor;}
+    NAT GetName(); //{return name;}
+    NAT GetDescriptor(); //{return descriptor;}
+    NAT GetNameAndDescriptor(); //{return name_and_descriptor;}
 
-    UInt GetMethodResPos() { return method_res_pos; }
+    UInt GetMethodResPos(); //{ return method_res_pos; }
 };
+#endif

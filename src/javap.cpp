@@ -1,15 +1,5 @@
 #include "../include/runtime/ClassBase.h"
 
-class CONSTANT_METATYPE{
-public:
-    virtual types get_instance_type(){
-        return CONS_METATYPE;
-    }
-    virtual void* get_value(){return NULL; }
-    virtual void* get_name_index(){return NULL;}
-    virtual void* get_binary_info(){return NULL;}
-};
-
 class CONSTANT_utf8: public CONSTANT_METATYPE{
 public:
     int length;

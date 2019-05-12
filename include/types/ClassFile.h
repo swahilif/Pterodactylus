@@ -1,14 +1,16 @@
 #include "../runtime/VirtualTable.h"
 #include "../runtime/ClassBase.h"
 #include "../runtime/ConstantPool.h"
-#include "ClassLoader.h"
+#include "../runtime/Field.h"
+#include "../runtime/StaticMethodTable.h"
+#include "General.h"
 #include <assert.h>
 
 // [ClassName] pClass
 // 解析后的类存放地址
 
 class pClass {
-    UBoolean is_loaded;
+    UBoolean is_loaded_;
 public:
     VirtualTable* vtp;
     StaticMethodTable* smtp; // 针对类中所有的静态函数的Table
@@ -19,7 +21,7 @@ public:
     map<string, int> ftp;
     ConstantPool* pcp;
 
-    ConstantPoolMetaType* GetConstantPoolItem(int pl_index) {return pcp->GetConstantPoolItem(pl_index);}
+    ConstantPoolMetaType* GetConstantPoolItem(int pl_index);// {return pcp->GetConstantPoolItem(pl_index);}
 
     bool ACC_PUBLIC;
     bool ACC_FINAL;
@@ -40,7 +42,7 @@ public:
     UShort method_count;
 
     pClass();
-    pClass(class_file*);
+    pClass(class_attribute*);
     /*
     pClass(class_file* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
         ACC_ABSTRACT(pcf->ACC_ABSTRACT), ACC_SYNTHETIC(pcf->ACC_SYNTHETIC), ACC_ANNOTATION(pcf->ACC_ANNOTATION), ACC_ENUM(pcf->ACC_ENUM) {
@@ -106,4 +108,6 @@ public:
     }*/
 
     UBoolean is_loaded();
+
 };
+

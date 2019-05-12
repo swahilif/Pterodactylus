@@ -1,3 +1,5 @@
+#ifndef VIRTUALTABLE_DEF
+#define VIRTUALTABLE_DEF
 #include "MethodPool.h"
 #include <map>
 #include <string>
@@ -52,8 +54,9 @@ public:
         }
     }
     */
-    MethodEntry* GetVirtualEntry(string nat) { // nat for NameAndType
+    MethodEntry* GetVirtualEntry(string nat); /* { // nat for NameAndType
         if (!nameMap.count(nat)) return NULL;
         return entryList[nameMap[nat]];
-    }
+    } */
 };
+#endif

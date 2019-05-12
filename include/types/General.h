@@ -8,6 +8,7 @@ using UInt = unsigned int;
 using UChar = unsigned char;
 using HexCode = unsigned char;
 using UBytePtr = unsigned char*;
+using UBoolean = bool;
 using StatusCode = unsigned char;
 
 using NAT = std::string;

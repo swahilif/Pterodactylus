@@ -1,0 +1,4 @@
+class ObjectHeader {
+    pClass* pkl;
+    
+};

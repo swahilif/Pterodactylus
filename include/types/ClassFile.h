@@ -109,6 +109,6 @@ public:
     }*/
 
     UBoolean is_loaded();
-
+    void set_loaded();
 };
 

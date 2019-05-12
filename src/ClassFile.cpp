@@ -1,5 +1,4 @@
-#include "../include/types/ClassFile.h"
-#include "../runtime/Field.h"
+#include "../include/runtime/Field.h"
 #include "../include/types/ClassLoader.h"
 
 pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
@@ -31,13 +30,13 @@ pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf-
             assert(pFatherClass != NULL); // 父类必须存在
 
             if (!pFatherClass->is_loaded()) {
-                if (!ClassLoader::LoadClass(pFatherClass))
+                //if (!ClassLoader::LoadClass(pFatherClass))
                     throw "Can't load father class into runtime environment.";
                 // Load Father Class
             }
 
             // Load This Class.
-            if (!ClassLoader::LoadClass(this)) {
+            if (!ClassLoader::LoadClass(pcf)) {
                 throw "Can't load this class into runtime environment.";
             }
     }
@@ -74,4 +73,8 @@ pClass::pClass() {
 
 UBoolean pClass::is_loaded() {
     return this->is_loaded_;
+}
+
+void pClass::set_loaded() {
+    this->is_loaded_ = true;
 }

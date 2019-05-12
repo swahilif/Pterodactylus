@@ -10,7 +10,7 @@ namespace ClassLoader {
     int LoadClass(class_attribute* pkla) {
         int res_pos = -1;
         pClass *pkl = NULL;
-        for (int i = 0; i < ClassLoader::MAX_CONSTANTPOOL_COUNT; i++)
+        for (int i = 0; i < ClassLoader::MAX_LOADED_CLASSNUM; i++)
             if (ClassLoader::arrLoadedClass[i] == NULL) { 
                 res_pos = i;
                 break;
@@ -21,11 +21,11 @@ namespace ClassLoader {
             return 0;
         }
 
-        pkl = pClass(pkla);
+        pkl = new pClass(pkla);
 
         ClassLoader::arrLoadedClass[res_pos] = pkl;
         ClassLoader::nameMap[pkla->get_class_name(pkl->this_class)] = res_pos;
-        pkl->is_loaded = true;
+        pkl->set_loaded();
 
         return 1;
     }

@@ -1,5 +1,7 @@
 #include "ClassBase.h"
+#include "../types/General.h"
 #include <string>
+#include <map>
 using std::string;
 
 class FieldEntry {
@@ -10,24 +12,24 @@ class FieldEntry {
     UShort byte;
 
     static UShort resolve(string dp) {
-        switch (dp) {
-            case "I":
+        switch (dp[0]) {
+            case 'I':
                 return sizeof(int);
-            case "F":
+            case 'F':
                 return sizeof(float);
-            case "L":
+            case 'L':
                 return sizeof(int);
-            case "J":
+            case 'J':
                 return sizeof(long);
-            case "S":
+            case 'S':
                 return sizeof(short);
-            case "Z":
+            case 'Z':
                 return sizeof(bool);
-            case "B":
+            case 'B':
                 return sizeof(char);
-            case "C":
+            case 'C':
                 return sizeof(char);
-            case "D":
+            case 'D':
                 return sizeof(double);
             default:
                 return 0;
@@ -45,20 +47,19 @@ public:
     bool ACC_ENUM;
     
     FieldEntry() {}
-    FieldEntry(FIELDINFO* pfi, class_info* pkl) {
+    FieldEntry(FIELDINFO* pfi, class_attribute* pkl) ;
+    /* {
         ACC_PUBLIC = pfi->ACC_PUBLIC;
         ACC_PRIVATE = pfi->ACC_PRIVATE;
         ACC_PROTECTED = pfi->ACC_PROTECTED;
         ACC_STATIC = pfi->ACC_STATIC;
         ACC_FINAL = pfi->ACC_FINAL;
-        /*
         ACC_SYNCHRONIZE = pfi->ACC_SYNCHRONIZE
         ACC_BRIDGE = pfi->ACC_BRIDGE;
         ACC_VARARGS = pfi->ACC_VARARGS;
         ACC_NATIVE = pfi->ACC_NATIVE;
         ACC_ABSTRACT = pfi->ACC_ABSTRACT;
         ACC_STRICTFP = pfi->ACC_STRICTFP;
-        */
         ACC_SYNTHETIC = pfi->ACC_SYNTHETIC; 
 
         auto info = pfi->get_info(pkl);
@@ -67,11 +68,14 @@ public:
         descriptor = info.second;
         byte = resolve(descriptor);
         name_and_descriptor = name + descriptor;
-    }
+    } 
+    */
 
-    UShort GetByte() {return byte;}
+    UShort GetByte(); 
 
-    string GetName() {return name;}
-    string GetDescriptor() {return descriptor;}
-    string GetNameAndDescriptor() {return name_and_descriptor;}
+    string GetName();
+    string GetDescriptor(); 
+    string GetNameAndDescriptor(); 
 };
+
+bool MakeFieldTable(std::map<string, int> &ftp, pClass *pkl);

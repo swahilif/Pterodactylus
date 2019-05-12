@@ -1,4 +1,5 @@
 #include "../include/types/ClassFile.h"
+#include "../runtime/Field.h"
 
 pClass::pClass(class_file* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
         ACC_ABSTRACT(pcf->ACC_ABSTRACT), ACC_SYNTHETIC(pcf->ACC_SYNTHETIC), ACC_ANNOTATION(pcf->ACC_ANNOTATION), ACC_ENUM(pcf->ACC_ENUM) {
@@ -22,6 +23,8 @@ pClass::pClass(class_file* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_
                 FIELDINFO *pfi = pcf->field_info[k];
                 arrField[k] = new FieldEntry(pfi, pcf);
             }
+
+            MakeFieldTable(ftp, this);
 
             pFatherClass = ClassLoader::findLoadedClass(pcf->get_class_name(pcf->parent_index)); // 尝试获取父类 
             assert(pFatherClass != NULL); // 父类必须存在

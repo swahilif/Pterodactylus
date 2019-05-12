@@ -16,6 +16,7 @@ public:
     pClass* pFatherClass;
     MethodEntry** arrMethod; // 类中所有函数的对应MethodEntry*
     FieldEntry** arrField;
+    map<string, int> ftp;
     ConstantPool* pcp;
 
     ConstantPoolMetaType* GetConstantPoolItem(int pl_index) {return pcp->GetConstantPoolItem(pl_index);}

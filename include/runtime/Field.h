@@ -12,30 +12,6 @@ class FieldEntry {
 
     UShort byte;
 
-    static UShort resolve(string dp) {
-        switch (dp[0]) {
-            case 'I':
-                return sizeof(int);
-            case 'F':
-                return sizeof(float);
-            case 'L':
-                return sizeof(int);
-            case 'J':
-                return sizeof(long);
-            case 'S':
-                return sizeof(short);
-            case 'Z':
-                return sizeof(bool);
-            case 'B':
-                return sizeof(char);
-            case 'C':
-                return sizeof(char);
-            case 'D':
-                return sizeof(double);
-            default:
-                return 0;
-        }
-    }
 public:
     bool ACC_PUBLIC;
     bool ACC_PRIVATE;
@@ -77,7 +53,9 @@ public:
     string GetName();
     string GetDescriptor(); 
     string GetNameAndDescriptor(); 
+    friend bool MakeFieldTable(std::map<string, int> &ftp, pClass *pkl);
 };
 
+UShort field_resolve(string dp); 
 bool MakeFieldTable(std::map<string, int> &ftp, pClass *pkl);
 #endif

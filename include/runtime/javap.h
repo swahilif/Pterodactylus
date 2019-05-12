@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstring>
+#include "../types/General.h"
 #include <string>
 #include <stdlib.h>
 #include <iostream>
@@ -99,6 +100,7 @@ public:
     ushort name_index;
     ushort descriptor_index;
     ushort attributes_count;
+    std::pair<std::string,std::string> get_info(class_attribute*);
     ATTRIBUTEINFO **attributes;
     types get_permission();
     FIELDINFO(int access_flags, int name_index, int descriptor_index, int attributes_count);

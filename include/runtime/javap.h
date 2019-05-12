@@ -18,10 +18,10 @@ enum types {CONS_UTF8, CONS_INTEGER, CONS_FLOAT, CONS_LONG, CONS_DOUBLE, CONS_ST
 
 class CONSTANT_METATYPE{
 public:
-    virtual types get_instance_type()=0;
-    virtual void* get_value()=0;
-    virtual void* get_name_index()=0;
-    virtual void* get_binary_info()=0;
+    virtual types get_instance_type(){return CONS_METATYPE;}
+    virtual void* get_value(){return NULL;}
+    virtual void* get_name_index(){return NULL;}
+    virtual void* get_binary_info(){return NULL;}
 };
 
 //class CONSTANT_METATYPE;

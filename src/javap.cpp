@@ -171,6 +171,11 @@ types FIELDINFO::get_permission(){
     else return PROTECTED;
 }
 
+pair<string,string> FIELDINFO::get_info(class_attribute* cl){
+    pair<string,string> info = cl->get_info(name_index, descriptor_index);
+    return info;
+}
+
 FIELDINFO::FIELDINFO(int access_flags, int name_index, int descriptor_index, int attributes_count){
     this->name_index = name_index;
     this->descriptor_index = descriptor_index;
@@ -195,7 +200,7 @@ FIELDINFO::FIELDINFO(int access_flags, int name_index, int descriptor_index, int
 }
 
 void** ATTRIBUTEINFO::get_attributes(){return NULL;}
-types ATTRIBUTEINFO::get_instance_type() { return ATTR_META; }
+types ATTRIBUTEINFO::get_instance_type(){return ATTR_META;}
 uchar* ATTRIBUTEINFO::get_code(){return NULL;}
 ushort ATTRIBUTEINFO::get_length(){return 0;}
 ATTRIBUTEINFO::ATTRIBUTEINFO(ushort index, ushort length):attribute_name_index(index), attribute_length(length){}
@@ -318,7 +323,7 @@ string class_attribute::get_class_name(int index){
     return name;
 }
 
-class_attribute::class_attribute(char* path){
+class_attribute::class_attribute(const char* path){
     FILE *file;
     char *buffer = new char[10000];
     int point = 0;
@@ -709,9 +714,4 @@ void process_attribute_info(char *buffer, int count, int *point, ATTRIBUTEINFO *
         //printf("Quit Attribute, Pointer: %d\n", *point);
         //*point += length;
     }
-}
-
-int main(int argc, char **argv){
-    class_attribute class_file(argv[1]);
-    return 0;
 }

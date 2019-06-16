@@ -1,9 +1,12 @@
 #include "../include/runtime/ConstantPool.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 /*
  * Please move from the exit rows if you are unwilling and unable to perform the necessary actions without injury
  */
 
-int ConstantPoolMetaType::GetInstanceType() {return instance_type;}
+//int ConstantPoolMetaType::GetInstanceType() {return instance_type;}
 
 ConstantPoolRefType::ConstantPoolRefType(UShort _class_index, UShort _entry_index, int _instance_type) {
     instance_type = _instance_type; 
@@ -37,13 +40,19 @@ ConstantPoolValueType::ConstantPoolValueType(void* _value, int _instant_type) {
         value = new UShort(*(UShort*)_value);
 }
 
+ConstantPoolRefType::~ConstantPoolRefType() {
+
+}
+
 ConstantPoolValueType::~ConstantPoolValueType() {
     delete value;
 }
+
 void* ConstantPoolValueType::GetValue() { return value; }
 
 ConstantPoolNAT::ConstantPoolNAT(UInt _name_index, UInt _descriptor_index) {
     name_index = _name_index;
+    instance_type = CONS_NAME_TYPE;
     descriptor_index = _descriptor_index;
     nat = "";
 }
@@ -52,10 +61,47 @@ NAT ConstantPoolNAT::GetNameAndType() {
     return nat;
 }
 
+bool ConstantPool::ResolveCLS() {
+    for (int k=1; k<constant_pool_count; k++) {
+        if (cpm[k]->GetInstanceType() == CONS_CLASS) {
+            auto tmp = reinterpret_cast<ConstantPoolValueType*>(cpm[k]);
+            tmp->value = (string*) cpm[*(UShort*)tmp->value]->GetValue();
+        }
+    }
+}
+
+bool ConstantPool::ResolveNAT() {
+    for (int k=1; k<constant_pool_count; k++) {
+        if (cpm[k]->GetInstanceType() == CONS_NAME_TYPE) {
+            auto tmp = reinterpret_cast<ConstantPoolNAT*>(cpm[k]);
+            tmp->nat = *(string*)cpm[tmp->name_index]->GetValue() + ":" + *(string*)cpm[tmp->descriptor_index]->GetValue();
+        }
+    }
+}
+
+bool ConstantPool::ResolveRef() {
+    for (int k=1; k<constant_pool_count; k++) {
+        if (cpm[k]->GetInstanceType() == CONS_FIELD || cpm[k]->GetInstanceType() == CONS_METHOD || cpm[k]->GetInstanceType() == CONS_INTERFACE) {
+            auto tmp = reinterpret_cast<ConstantPoolRefType*>(cpm[k]);
+            tmp->nat = *(string*)cpm[tmp->class_index]->GetValue() + "." + cpm[tmp->entry_index]->GetNameAndType();
+            //tmp->value = (string*) cpm[tmp->value]->GetValue();
+        }
+    }
+}
+
+ConstantPoolNAT::~ConstantPoolNAT() {
+    
+}
+
 ConstantPool::ConstantPool(CONSTANT_METATYPE** pcm, UShort ConstantPoolCount) {
     constant_pool_count = ConstantPoolCount;
-    cpm = new ConstantPoolMetaType*[constant_pool_count];
-    for (int i = 0; i < ConstantPoolCount; i++) {
+    cpm = new ConstantPoolMetaType*[constant_pool_count+1];
+    cout << "came into here!" << endl;
+    cout << "Constant pool count : " << ConstantPoolCount << endl;
+    cout << pcm << endl;
+    cout << pcm[1] << endl;
+        
+    for (int i = 1; i < ConstantPoolCount; i++) {
         auto instype = pcm[i]->get_instance_type();
         if (instype == CONS_METATYPE) throw "ConstantPool can't have any CONS_METATYPE entry!";
         if (instype == CONS_UTF8) {
@@ -68,9 +114,13 @@ ConstantPool::ConstantPool(CONSTANT_METATYPE** pcm, UShort ConstantPoolCount) {
             std::pair<UShort, UShort>* pus2 = (std::pair<UShort, UShort>*)pcm[i]->get_binary_info();
             cpm[i] = new ConstantPoolRefType(pus2->first, pus2->second, instype);
         } else if (instype == CONS_NAME_TYPE) {
-   //         cpm[i] = new ConstantPoolNAT();
+            std::pair<UShort, UShort>* pus2 = (std::pair<UShort, UShort>*)pcm[i]->get_binary_info();
+            cpm[i] = new ConstantPoolNAT(pus2->first, pus2->second);
         }  
+        cout << "ConstantPool["<<i<<"] is "<<instype << endl;
     }
+
+    cout << "Over" << endl;
 }
 
 ConstantPool::~ConstantPool() {
@@ -87,10 +137,13 @@ ConstantPoolMetaType* ConstantPool::GetConstantPoolItem(int index) {
 }
 
 int ConstantPoolRefType::resolved(ConstantPool* pcp) { // resolve the index form into string form 
+    cout << "Just here1" << endl;
     auto* pci = pcp->GetConstantPoolItem(class_index);
     auto* pei = pcp->GetConstantPoolItem(entry_index);
+    cout << pci << "><" << pei << endl;
     if (pci == NULL || pei == NULL)
         return 0;
+    cout << pci->GetValue() << "><" << pei->GetNameAndType() << endl;
     if (pci->GetValue() == NULL || pei->GetValue() == NULL) // 无法获得字符串
         return 0;
     UInt utf8_index = *(UInt*)pci->GetValue();
@@ -99,6 +152,10 @@ int ConstantPoolRefType::resolved(ConstantPool* pcp) { // resolve the index form
     this->nat = *(NAT*)pui->GetValue() + "." + pei->GetNameAndType();
     return 1;
 }
+
+void* ConstantPoolNAT::GetValue() {return NULL;}
+void* ConstantPoolRefType::GetValue() {return NULL;}
+int ConstantPoolValueType::resolved(ConstantPool*p){return 0;}
 
 int ConstantPoolNAT::resolved(ConstantPool* pcp) {
     auto* pci = pcp->GetConstantPoolItem(name_index);

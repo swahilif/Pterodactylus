@@ -143,7 +143,7 @@ private:
     PureContainer CodePool;
     UInt PoolLength;
     PureVacantIndexContainer VacantIndexStack;
-} GenCodePool(100);
+};
 
 class MethodEntry {
     bool ACC_PUBLIC;

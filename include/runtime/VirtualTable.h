@@ -54,6 +54,7 @@ public:
         }
     }
     */
+    const ContainerType& GetEntryList();
     MethodEntry* GetVirtualEntry(string nat); /* { // nat for NameAndType
         if (!nameMap.count(nat)) return NULL;
         return entryList[nameMap[nat]];

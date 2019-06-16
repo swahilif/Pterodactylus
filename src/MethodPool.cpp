@@ -1,4 +1,7 @@
 #include "../include/runtime/MethodPool.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 PureCode::PureCode() {current_pos=0; code_length = 0; pData = NULL;}
 PureCode::PureCode(CODE* pCode) {
@@ -10,8 +13,14 @@ PureCode::PureCode(CODE* pCode) {
     code_length = pCode->code_length;
     attributes_count = pCode->attributes_count;
 
-    for (auto x = 0; x < code_length; x++)
+    cout << "Enter into the pCode!" << endl;
+    cout << max_stack << " " << max_locals << " " << code_length << endl;
+
+    for (auto x = 0; x < code_length; x++) {
         *(pData+x) = *(pCode->code+x);
+        cout << "x:"<<x<<", HEX:"<<int(*(pData+x))<<endl;
+    }
+    cout << "END!!!p" << endl;
 }
 
 UShort PureCode::GetMaxStack() {return max_stack;}
@@ -81,7 +90,9 @@ UInt PureCodePool::Reserve(CODE* pCode) { // UInt _codeLength, UBytePtr _codeStr
         return 0;
     UInt reserved_slot = VacantIndexStack.top();
     VacantIndexStack.pop();
+    cout << reserved_slot << "!" << endl;
     CodePool[reserved_slot] = new PureCode(pCode); //_codeLength, _codeString);
+    cout << "HAHA" << endl;
     return reserved_slot;
 }
 
@@ -129,7 +140,7 @@ bool MethodEntry::GetAccessFlags(string flag) {
         return ACC_NATIVE;
     return false;
 }
-
+PureCodePool GenCodePool(100);
 MethodEntry::MethodEntry() {}
 
 MethodEntry::MethodEntry(METHODINFO* pmi, class_attribute* pkl) {
@@ -146,15 +157,24 @@ MethodEntry::MethodEntry(METHODINFO* pmi, class_attribute* pkl) {
     ACC_STRICTFP = pmi->ACC_STRICTFP;
     ACC_SYNTHETIC = pmi->ACC_SYNTHETIC; 
 
+    printf("ACCESS PRIVELIGFE :%d %d %d\n", ACC_PUBLIC, ACC_PRIVATE, ACC_PROTECTED);
+
     auto info = pmi->get_info(pkl);
 
     name = info.first;
     descriptor = info.second;
 
-    name_and_descriptor = name + descriptor; 
+    name_and_descriptor = name + ":" + descriptor; 
+    cout << name_and_descriptor << "NAT" << endl;
 
     attribute_count = pmi->attributes_count;
-    method_res_pos = GenCodePool.Reserve((CODE*)pmi->attributes[pmi->get_code_index()]); 
+    cout << attribute_count << "attr_count" << endl;
+    cout << (CODE*)pmi->attributes[pmi->get_code_index()] << "[[[attr_count" << endl;
+
+    UInt  t = GenCodePool.Reserve((CODE*)pmi->attributes[pmi->get_code_index()]);
+    cout << t << endl;
+    method_res_pos = t;
+    cout << "G" << endl;
 }
 
 NAT MethodEntry::GetName() {return name;}

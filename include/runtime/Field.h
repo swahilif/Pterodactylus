@@ -1,10 +1,10 @@
+#ifndef FIELD_ENTRY_DEF
+#define FIELD_ENTRY_DEF
 #include "ClassBase.h"
 #include "../types/General.h"
 #include <string>
 #include <map>
 using std::string;
-#ifndef FIELD_ENTRY_DEF
-#define FIELD_ENTRY_DEF
 class FieldEntry {
     string name;
     string descriptor;
@@ -23,7 +23,7 @@ public:
     bool ACC_SYNTHETIC;
     bool ACC_ENUM;
     
-    FieldEntry() {}
+    FieldEntry() ;
     FieldEntry(FIELDINFO* pfi, class_attribute* pkl) ;
     /* {
         ACC_PUBLIC = pfi->ACC_PUBLIC;
@@ -50,6 +50,7 @@ public:
 
     UShort GetByte(); 
 
+    bool isObject();
     string GetName();
     string GetDescriptor(); 
     string GetNameAndDescriptor(); 

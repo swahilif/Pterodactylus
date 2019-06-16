@@ -6,7 +6,8 @@ using std::map;
 
 // [ClassName] StaticMethodTable
 // 处理所有静态函数和私有函数
-
+#ifndef STATIC_METHOD_TABLE
+#define STATIC_METHOD_TABLE
 using MapContainerType = map<string, int>;
 using ContainerType = vector<MethodEntry*>;
 
@@ -30,3 +31,4 @@ public:
         return NULL; // 返回NULL，使得Resolve从父类继续解析
     }*/
 };
+#endif

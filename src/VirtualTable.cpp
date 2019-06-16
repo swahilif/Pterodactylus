@@ -38,6 +38,8 @@ VirtualTable::VirtualTable(pClass* pkl)
     }
 }
 
+const ContainerType& VirtualTable::GetEntryList() {return entryList;}
+
 MethodEntry* VirtualTable::GetVirtualEntry(string nat) { // nat for NameAndType
     if (!nameMap.count(nat)) return NULL;
     return entryList[nameMap[nat]];

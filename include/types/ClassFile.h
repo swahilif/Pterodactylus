@@ -1,3 +1,5 @@
+#ifndef CLASSFILE_DEF
+#define CLASSFILE_DEF
 #include "../runtime/VirtualTable.h"
 #include "../runtime/ClassBase.h"
 #include "../runtime/ConstantPool.h"
@@ -18,8 +20,8 @@ public:
     pClass* pFatherClass;
     MethodEntry** arrMethod; // 类中所有函数的对应MethodEntry*
     FieldEntry** arrField;
-    map<string, int> ftp;
-    vector<int> byteGrad;
+    map<string, int> ftp; // NameAndDescriptor 到 Field的偏移量的转换
+    vector<int> byteGrad; // 字节的偏移量
     ConstantPool* pcp;
 
     ConstantPoolMetaType* GetConstantPoolItem(int pl_index);// {return pcp->GetConstantPoolItem(pl_index);}
@@ -44,71 +46,11 @@ public:
 
     pClass();
     pClass(class_attribute*);
-    /*
-    pClass(class_file* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf->ACC_FINAL), ACC_SUPER(pcf->ACC_SUPER), ACC_INTERFACE(pcf->ACC_INTERFACE), 
-        ACC_ABSTRACT(pcf->ACC_ABSTRACT), ACC_SYNTHETIC(pcf->ACC_SYNTHETIC), ACC_ANNOTATION(pcf->ACC_ANNOTATION), ACC_ENUM(pcf->ACC_ENUM) {
-            magic = pcf->magic;
-            minor_version = pcf->minor_version;
-            major_version = pcf->major_version;
-            this_class = pcf->this_class;
-            constant_pool_count = pcf->constant_pool_count;
 
-            field_count = pcf->field_count;
-            method_count = pcf->method_count;
-
-            arrMethod = new MethodEntry*[method_count];
-
-            for (auto k = method_count - 1; k >= 0; k--) {
-                METHODINFO *pmi = pcf->method_info[k];
-                arrMethod[k] = new MethodEntry(pmi, pcf);
-            }
-
-            for (auto k = field_count - 1; k >= 0; k--) {
-                FIELDINFO *pfi = pcf->field_info[k];
-                arrField[k] = new FieldEntry(pfi, pcf);
-            }
-
-            pFatherClass = ClassLoader::findLoadedClass(pcf->get_class_name(pcf->parent_index)); // 尝试获取父类 
-            assert(pFatherClass != NULL); // 父类必须存在
-
-            if (!pFatherClass->is_loaded()) {
-                if (!ClassLoader::LoadClass(pFatherClass))
-                    throw "Can't load father class into runtime environment.";
-                // Load Father Class
-            }
-
-            // Load This Class.
-            if (!ClassLoader::LoadClass(this)) {
-                throw "Can't load this class into runtime environment.";
-            }
-    }*/
-
-    int MakeVirtualTable() ;/*{
-        vtp = new VirtualTable(this);
-        return vtp == NULL;
-    }
-*/
-    int MakeStaticMethodTable();/* {
-        smtp = new StaticMethodTable(this);
-        return smtp == NULL;
-    }
-*/
-    ~pClass(); /* {
-        if (vtp != NULL) delete vtp;
-        if (smtp != NULL) delete smtp;
-        if (arrMethod != NULL) { 
-            for (auto k = method_count - 1; k >= 0; k--) 
-                if (arrMethod[k] != NULL) delete arrMethod[k];
-            delete[] arrMethod;
-        } 
-        if (arrField != NULL) {
-            for (auto k = field_count - 1; k >= 0; k--)
-                if (arrField[k] != NULL) delete arrField[k];
-            delete[] arrField;
-        }
-    }*/
-
+    int MakeVirtualTable() ;
+    int MakeStaticMethodTable();
+    ~pClass(); 
     UBoolean is_loaded();
     void set_loaded();
 };
-
+#endif

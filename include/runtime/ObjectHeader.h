@@ -1,11 +1,21 @@
+#ifndef OBJECT_HEADER_H
+#define OBJECT_HEADER_H
 #include "../types/General.h"
 class Object;
+
+// ObjectHeader 对象头的相关信息
+// cnt 被root 
+
 class ObjectHeader {
-    pClass* pkl;
     UInt length;   
+    int cnt;
+    bool isArr;
     friend class Object;
 public:
-    ObjectHeader(pClass* _pkl, UInt _len); //:pkl(_pkl), length(_len) {}
-    pClass* getClass() ; //{return pkl;}
+    ObjectHeader();
+    ObjectHeader(UInt _len); //:pkl(_pkl), length(_len) {}
     UInt getLength() ; //{return length;}
+    int getCount();
+    int changeCnt(int del);
 };
+#endif

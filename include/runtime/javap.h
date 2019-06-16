@@ -1,3 +1,5 @@
+#ifndef JAVAPH_DEF
+#define JAVAPH_DEF
 #include <cstdio>
 #include <cstring>
 #include "../types/General.h"
@@ -14,7 +16,7 @@ using ulong = unsigned long;
 enum types {CONS_UTF8, CONS_INTEGER, CONS_FLOAT, CONS_LONG, CONS_DOUBLE, CONS_STRING, CONS_CLASS,
     CONS_FIELD, CONS_METHOD, CONS_INTERFACE, CONS_NAME_TYPE, CONS_METHOD_HANDLE, CONS_METHOD_TYPE,
     CONSTANT_INVOKE_DYNAMIC, CONS_METATYPE, PUBLIC, PRIVATE, PROTECTED, ATTR_META, ATTR_CODE, ATTR_LINENUMBER, ATTR_SOURCEFILE
-} type;
+};
 
 class CONSTANT_METATYPE{
 public:
@@ -57,7 +59,7 @@ public:
     bool ACC_ENUM;
     string get_class_name(int index);
     pair<string,string> get_info(int name, int descriptor);
-    class_attribute(char* path);
+    class_attribute(const char* path);
 };
 
 class METHODINFO{
@@ -118,7 +120,7 @@ public:
     virtual ushort get_length();
 };
 
-class CODE:public ATTRIBUTEINFO{
+class CODE: public ATTRIBUTEINFO{
 public:
     ushort max_stack;
     ushort max_locals;
@@ -143,3 +145,4 @@ void process_attribute_info(char *buffer, int count, int *point, ATTRIBUTEINFO *
 uint read_u(char *buffer, int count, int *point);
 double read_f(char *buffer, int count, int *point);
 
+#endif

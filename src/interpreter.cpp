@@ -70,6 +70,7 @@ int parse_param(string type){
 
 void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread_stack){
     PureCode* code = GenCodePool.Access(method->GetMethodResPos());
+    CodeCursor* cc = new CodeCursor(code, 0);
     uint code_length = code->GetCodeLength();
 #ifdef DEBUG
     cout << "Code length: " << code_length << endl;
@@ -77,7 +78,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
     int count = 0;
     uchar tmp;
     while(count < code_length){
-        uchar bytecode = code->GetNextCode();
+        uchar bytecode = cc->GetNextCode();
 #ifdef DEBUG
         printf("Code: %x\n", int(bytecode));
 #endif
@@ -100,14 +101,21 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 
                 break;
             }
+            // sipush [byte1 byte2]
+            case (0x11):{
+                int op1 = cc->GetNextCode();
+                int op2 = cc->GetNextCode();
+                int res = (op1 << 8) | op2;
+                thread_stack[++frame->stack_top] = res;
+                break;
+            }
             // bipush [byte1]
             case (0x10):{
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
 #ifdef DEBUG
                 cout << "Bipush " << int(tmp) << endl;
 #endif
                 thread_stack[++frame->stack_top] = long(tmp);
-                cout << "Stack top: " << thread_stack[frame->stack_top] << " Second one: " << thread_stack[frame->stack_top-1] << endl;
                 break;
             }
             // iconst_0
@@ -148,14 +156,17 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // iinc [index const]
             case (0x84):{
-                int index = code->GetNextCode();
-                int c = code->GetNextCode();
+                int index = cc->GetNextCode();
+                int c = cc->GetNextCode();
                 thread_stack[frame->local_variable_table+index] += c;
                 break;
             }
             // iadd
             case (0x60):{
                 long res = thread_stack[frame->stack_top] + thread_stack[frame->stack_top-1];
+#ifdef DEBUG
+                cout << "add result:" << res << endl;
+#endif
                 thread_stack[--frame->stack_top] = res;
                 break;
             }
@@ -176,6 +187,12 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             case (0x64):{
                 long res = thread_stack[frame->stack_top-1] - thread_stack[frame->stack_top];
                 thread_stack[--frame->stack_top] = res;
+                break;
+            }
+            // aload
+            case (0x19):{
+                tmp = cc->GetNextCode();
+                thread_stack[++frame->stack_top] = thread_stack[frame->local_variable_table+tmp];
                 break;
             }
             // aload_0
@@ -204,7 +221,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // iload [index]
             case (0x15):{
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
                 thread_stack[++frame->stack_top] = thread_stack[frame->local_variable_table+tmp];
                 break;
             }
@@ -259,7 +276,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // astore [indexbyte]
             case (0x3a):{
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
 #ifdef DEBUG
                 cout << "Slot index: " << int(tmp) << endl;
 #endif
@@ -344,8 +361,9 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // istore [index]
             case (0x36):{
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
                 thread_stack[frame->local_variable_table+tmp] = thread_stack[frame->stack_top--];
+                break;
             }
             // istore_0
             case (0x3b):{
@@ -376,82 +394,160 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 frame->stack_top--;
                 break;
             }
+            // ifeq [byte1 byte2]
+            case (0x99):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op == 0)
+                    cc->Jump(offset-3);
+                break;
+            }
+            // ifne [byte1 byte2]
+            case (0x9a):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op != 0)
+                    cc->Jump(offset-3);
+                break;
+            }
+            // iflt [byte1 byte2]
+            case (0x9b):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op < 0)
+                    cc->Jump(offset-3);
+                break;
+            }
+            // ifle [byte1 byte2]
+            case (0x9e):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op <= 0)
+                    cc->Jump(offset-3);
+                break;
+            }
+            // ifgt [byte1 byte2]
+            case (0x9d):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op > 0)
+                    cc->Jump(offset-3);
+                break;
+            }
+            // ifge [byte1 byte2]
+            case (0x9c):{
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
+                int op = thread_stack[frame->stack_top--];
+                if(op >= 0)
+                    cc->Jump(offset-3);
+                break;
+            }
             // if_icmpeq
             case (0x9f):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
                 if (op1 == op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // if_icmpne
             case (0xa0):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
                 if (op1 != op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // if_icmplt
             case (0xa1):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
                 if (op1 < op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // if_icmple
             case (0xa4):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
                 if (op1 <= op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // if_icmpgt
             case (0xa3):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
                 if (op1 > op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // if_icmpge
             case (0xa2):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
+                short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
+                cout << "offset: " << offset << endl;
                 long op2 = (long)thread_stack[frame->stack_top--];
                 long op1 = (long)thread_stack[frame->stack_top--];
 #ifdef DEBUG
                 cout << "Comparing two numbers " << op1 << " and " << op2 << endl;
 #endif
                 if (op1 >= op2)
-                    code->Jump(tmp-3);
+                    cc->Jump(offset-3);
                 break;
             }
             // goto
             case (0xa7):{
-                uchar byte1 = code->GetNextCode();
-                uchar byte2 = code->GetNextCode();
+                uchar byte1 = cc->GetNextCode();
+                uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
                 cout << "offset: " << offset << endl;
                 frame->stack_top -= 2;
-                code->Jump(offset-3);
+                cc->Jump(offset-3);
                 break;
             }
             // ireturn
@@ -467,6 +563,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 }
                 if (frame->caller != NULL)
                     thread_stack[++frame->caller->stack_top] = thread_stack[frame->stack_top];
+                delete cc;
                 return ;
             }
             // areturn
@@ -478,6 +575,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 }
                 if (frame->caller != NULL)
                     thread_stack[++frame->caller->stack_top] = thread_stack[frame->stack_top];
+                delete cc;
                 return ;
             }
             // return
@@ -489,18 +587,23 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                         ((Object*)thread_stack[frame->local_variable_table+i])->header->changeCnt(-1);
                     }
                 }
+                delete cc;
                 return ;
             }
             // new [0 index]
             case(0xbb):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
                 string class_name = *(string*)item->GetValue();
                 //class_name = class_name + ".class";
 #ifdef DEBUG
                 cout << class_name << endl;
 #endif
+                if (class_name == "java/util/Scanner"){
+                    class_name = "Scanner";
+                    cout << "Scanner Loaded!" << endl;
+                }
                 pClass* new_class = ClassLoader::findLoadedClass(class_name);
                 if (!new_class){
                     if(!ClassLoader::LoadClass(class_name, 1))
@@ -529,14 +632,17 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // getstatic [indexbyte1 indexbyte2]
             case(0xb2):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
-                item -> resolved(cl->pcp);
+                //item -> resolved(cl->pcp);
                 string full_name = item->GetNameAndType();
                 cout << "Full Name: " << full_name << endl;
                 if (full_name == "java/lang/System.out:Ljava/io/PrintStream;"){
                     //thread_stack[++frame->stack_top] = 1234;
+                    break;
+                }
+                else if (full_name == "java/lang/System.in:Ljava/io/InputStream;"){
                     break;
                 }
                 ulong pos = full_name.find('.');
@@ -552,10 +658,10 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // getfield [indexbyte1 indexbyte2]
             case(0xb4):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
-                item -> resolved(cl->pcp);
+                //item -> resolved(cl->pcp);
                 string full_name = item->GetNameAndType();
                 ulong pos = full_name.find('.');
                 string nat = full_name.substr(pos+1, full_name.length() - pos);
@@ -577,8 +683,8 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // putfield [indexbyte1 indexbyte2]
             case(0xb5):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
                 item -> resolved(cl->pcp);
                 string full_name = item->GetNameAndType();
@@ -605,12 +711,20 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // invokevirtual [indexbyte1 indexbyte2]
             case(0xb6):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp); // MethodInfo
                 string full_name = item->GetNameAndType();
                 if (full_name == "java/io/PrintStream.println:(I)V"){
                     cout << (long)thread_stack[frame->stack_top--] << endl;
+                    break;
+                }
+                else if (full_name == "java/util/Scanner.nextInt:()I"){
+
+                    cout << "Input Called!" << endl;
+                    int in_num;
+                    cin >> in_num;
+                    thread_stack[frame->stack_top] = in_num;
                     break;
                 }
                 cout << full_name << endl;
@@ -630,6 +744,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                     throw "New before loading!";
                 }
                 MethodEntry* new_method = new_cl->vtp->GetVirtualEntry(nat);
+;
                 StackFrame* new_frame = set_new_stack_frame(new_method, frame);
                 for (int j = 0; j < param_count + 1; j ++){
 #ifdef DEBUG
@@ -644,15 +759,15 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // invokespecial [indexbyte1 indexbyte2]
             case(0xb7):{
                 // TO BE DONE: init
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 frame->stack_top -= 1;
                 break;
             }
             // invokestatic [indexbyte1 indexbyte2]
             case(0xb8):{
-                tmp = code->GetNextCode();
-                tmp = code->GetNextCode();
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp); // MethodInfo
                 item->resolved(cl->pcp);
                 string full_name = item->GetNameAndType();
@@ -689,6 +804,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
         }
     }
+    delete cc;
 }
 
 int main(int argc, char **argv){

@@ -355,6 +355,13 @@ class_attribute::class_attribute(const char* path){
             cout << s << endl;
         }
     }
+    printf("DEBUG: Printing all the utf8.\n");
+    for (int i = 1; i < constant_pool_count; i ++){
+        if (constant_pool[i]->get_instance_type() == CONS_UTF8){
+            string s = *(string*)constant_pool[i]->get_value();
+            cout << s << endl;
+        }
+    }
 #endif
     // access flags
     this->access_flags = read_u(buffer, 2, &point);
@@ -449,6 +456,8 @@ int process_constant_pool(char *buffer, int count, int *point, CONSTANT_METATYPE
             case(1):{
                 int length = read_u(buffer, 2, point);
                 char *utf8 = (char*) malloc(sizeof(char) * length + 1);
+                //memset(utf8, 0, sizeof(char) * length + 1);
+                utf8[length] = 0;
                 memcpy(utf8, buffer + *point, length);
                 *point += length;
                 CONSTANT_utf8 *tmp = new CONSTANT_utf8(length, utf8);

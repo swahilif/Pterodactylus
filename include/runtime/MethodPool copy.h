@@ -7,7 +7,6 @@
 #include "../runtime/ClassBase.h"
 //#include "Attribute.h"
 
-
 // [ClassName] PureCode
 // 纯十六进制的方法区代码存储
 class PureCode {
@@ -19,7 +18,6 @@ class PureCode {
     UShort max_locals;
     UInt code_length;
     UShort attributes_count;
-    friend class CodeCursor;
 public:
 	PureCode(); //current_pos(0) {code_length = 0; pData = NULL;}
     PureCode(CODE* pCode); /*{
@@ -38,10 +36,9 @@ public:
     UShort GetMaxStack(); //{return max_stack;}
     UShort GetMaxLocals(); //{return max_locals;}
     UInt GetCodeLength(); //{return code_length;}
-    HexCode Jump(int len);
 
     ~PureCode(); //{delete[] pData;}
-
+    HexCode Jump(int len);
     HexCode GetNextCode(); /*{
         try {
             if (current_pos + 1 >= code_length)
@@ -56,8 +53,20 @@ public:
     }
     */
 
-    void SetCurrentPos(UShort index);
-    
+    void SetCurrentPos(UShort index);/* {
+        try {
+            if (index >= code_length)
+                throw "Access denied! The hex code read exceeds the maximum length.";
+            else if (index < 0) 
+                throw "Access denied! The index can't be negative!";
+            current_pos = index;
+        } catch (char *error_info) {
+#ifdef DEBUG_CLASS
+            cout << error_info << endl;
+#endif
+        }
+    } */
+
     HexCode GetCurrentPos() const; /* {
         return current_pos;
     } */
@@ -77,6 +86,7 @@ public:
         }
     } */
 };
+
 
 // [ClassName] PureCodePool
 // 管理PureCode用的索引结构
@@ -126,7 +136,10 @@ public:
         return 1;
     } */
 
-    ~PureCodePool(); 
+    ~PureCodePool(); /*{
+        for (auto k = 0; k < PoolLength; k++)
+            Release(k);
+    } */
 private:
     PureContainer CodePool;
     UInt PoolLength;
@@ -139,6 +152,7 @@ class MethodEntry {
     bool ACC_PROTECTED;
     bool ACC_STATIC;
     bool ACC_FINAL;
+//    bool ACC_SYNCHRONIZED;
     bool ACC_BRIDGE;
     bool ACC_VARARGS;
     bool ACC_NATIVE;
@@ -202,19 +216,6 @@ public:
 
     UInt GetMethodResPos(); //{ return method_res_pos; }
 };
-
-class CodeCursor {
-    UShort current_pos;
-    UShort code_length;
-    PureCode* cursor_pc;
-public:
-    CodeCursor();
-    CodeCursor(PureCode* pc, UShort init_pos);
-    HexCode GetNextCode();
-    bool JumpTo(UShort us);
-    bool Jump(int);
-};
 extern PureCodePool GenCodePool;
-
 
 #endif

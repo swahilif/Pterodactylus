@@ -3,42 +3,6 @@
 using std::cout;
 using std::endl;
 
-CodeCursor::CodeCursor() {
-    current_pos = 0;
-    code_length = 0;
-    cursor_pc = NULL;
-}
-
-CodeCursor::CodeCursor(PureCode* pc, UShort init_pos) {
-    current_pos = init_pos;
-    code_length = pc->GetCodeLength();
-    cursor_pc = pc;
-}
-
-HexCode CodeCursor::GetNextCode() {
-    try {
-        if (current_pos + 1 > code_length)
-            throw "Access denied! The hex code read exceeds the maximum length.";
-        return *(cursor_pc->pData+(current_pos++));
-    } catch (...) {
-#ifdef DEBUG_CLASS
-        cout << "1" << endl;
-#endif
-    }
-    return 0;
-}
-
-bool CodeCursor::JumpTo(UShort pos) {
-    assert(pos >= 0 && pos < code_length);
-    this->current_pos = pos;
-}
-
-// 带偏移量的跳转
-bool CodeCursor::Jump(int pos) {
-    assert(this->current_pos + pos >= 0 && this->current_pos + pos < code_length);
-    this->current_pos += pos;
-}
-
 PureCode::PureCode() {current_pos=0; code_length = 0; pData = NULL;}
 PureCode::PureCode(CODE* pCode) {
     pData = new HexCode[pCode->code_length + 1];
@@ -66,8 +30,9 @@ UInt PureCode::GetCodeLength() {return code_length;}
 PureCode::~PureCode() {delete[] pData;}
 
 HexCode PureCode::Jump(int pos) {
-    assert(pos >= 0 && pos < code_length);
-    this->current_pos = pos;
+    cout << "Jumping to position " << pos + current_pos << ", current pos is " << current_pos << endl;
+    assert(pos + current_pos >= 0 && current_pos + pos < code_length);
+    this->current_pos += pos;
 }
 
 HexCode PureCode::GetNextCode() {

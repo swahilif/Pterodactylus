@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
-#define DEBUG
 
 using uint = unsigned int;
 using ushort = unsigned short;

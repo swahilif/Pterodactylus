@@ -20,8 +20,6 @@ namespace ClassLoader {
     int LoadClass(string class_name) { //class_attribute* pkla) {
         int res_pos = -1;
         pClass *pkl = NULL;
-        class_attribute* pkla = new class_attribute(class_name.c_str());
-        pkl = new pClass(pkla);
         for (int i = 0; i < ClassLoader::MAX_LOADED_CLASSNUM; i++)
             if (ClassLoader::arrLoadedClass[i] == NULL) { 
                 res_pos = i;
@@ -33,18 +31,11 @@ namespace ClassLoader {
             return 0;
         }
 
-
+        class_attribute* pkla = new class_attribute(class_name.c_str());
+        pkl = new pClass(pkla);
 
         ClassLoader::arrLoadedClass[res_pos] = pkl;
-        int beg, end;
-        for (int k=class_name.length()-1; k>=0; k--)
-            if (class_name[k] == '/') {
-                beg = k+1; 
-                break;
-            }
-        for (end = beg; class_name[end]!='.'; end++);
-        class_name = class_name.substr(beg, end-beg);
-        ClassLoader::nameMap[class_name] = res_pos;
+        ClassLoader::nameMap[std::string(class_name)] = res_pos;
         pkl->set_loaded();
 
         return 1;
@@ -53,8 +44,6 @@ namespace ClassLoader {
     int LoadClass(string class_name, bool chk_path) { //class_attribute* pkla) {
         int res_pos = -1;
         pClass *pkl = NULL;
-        class_attribute* pkla = new class_attribute((class_path+class_name+".class").c_str());
-        pkl = new pClass(pkla);
         for (int i = 0; i < ClassLoader::MAX_LOADED_CLASSNUM; i++)
             if (ClassLoader::arrLoadedClass[i] == NULL) { 
                 res_pos = i;
@@ -65,10 +54,14 @@ namespace ClassLoader {
             throw "ClassLoader can't load any more class right now!";
             return 0;
         }
+
+        class_attribute* pkla = new class_attribute((class_path+class_name+".class").c_str());
+        pkl = new pClass(pkla);
+
         ClassLoader::arrLoadedClass[res_pos] = pkl;
         ClassLoader::nameMap[std::string(class_name)] = res_pos;
         pkl->set_loaded();
-        //cout << "Loaded Success!! ======== " << class_name << "  " << res_pos << endl;
+
         return 1;
     }
 

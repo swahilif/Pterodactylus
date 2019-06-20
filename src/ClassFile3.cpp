@@ -16,7 +16,7 @@ pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf-
             std::string fatherClassName = pcf->get_class_name(pcf->parent_index);
 
             pFatherClass = ClassLoader::findLoadedClass(fatherClassName); // 尝试获取父类 
-            //cout << fatherClassName << " REE " << pFatherClass << endl;
+            cout << fatherClassName << " REE " << pFatherClass << endl;
 
             if ((fatherClassName != "java/lang/Object") && pFatherClass == NULL) {
                 ClassLoader::LoadClass(fatherClassName, true);
@@ -42,27 +42,42 @@ pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf-
             constant_pool_count = pcf->constant_pool_count;
 
             arrMethod = new MethodEntry*[method_count];
-            arrField = new FieldEntry*[field_count];
-            //printf("minv %d  majv %d   cpc %d\n", minor_version, major_version, constant_pool_count);
-            //printf("methodcount %d\n", method_count);
+            //arrField = new FieldEntry*[field_count];
+            printf("minv %d  majv %d   cpc %d\n", minor_version, major_version, constant_pool_count);
+            printf("methodcount %d\n", method_count);
 
             for (auto k = method_count - 1; k >= 0; k--) {
                 METHODINFO *pmi = pcf->method_info[k];
                 arrMethod[k] = new MethodEntry(pmi, pcf);
-                //cout << "happy!" << k << endl;
+                cout << "happy!" << k << endl;
             }
-            //cout << "New" << field_count << endl;
+            cout << "New" << field_count << endl;
+
+            static_field_count = 0;
 
             for (auto k = field_count - 1; k >= 0; k--) {
                 FIELDINFO *pfi = pcf->field_info[k];
-                arrField[k] = 
-                new FieldEntry(pfi, pcf);
-                ////cout << "singout!" << k << endl;
+                if (pcf->ACC_STATIC)
+                    static_field_count++;
+            }
+
+            arrField = new FieldEntry*[field_count - static_field_count];
+            staticField = new FieldEntry*[staticField];
+            for (auto k = 0, idx = 0, sidx = 0; k < field_count; k++) {
+                FIELDINFO *pfi = pcf->field_info[k];
+                if (!pcf->ACC_STATIC) 
+                    arrField[idx++] = new FieldEntry(pfi, pcf);
+                else
+                    staticField[sidx++] = new FieldEntry(pfi, pcf);
+                //cout << "singout!" << k << endl;
             }           
 
-            MakeFieldTable(ftp, this);
+            BuildStaticFields();
 
-            //cout << "Have made field table." << endl;
+            field_count -= staticField;
+            MakeFieldTable(ftp, this, field_count);
+
+            cout << "Have made field table." << endl;
 
             // Init the f**ked constant pool
             this->pcp = new ConstantPool(pcf->constant_pool, this->constant_pool_count);
@@ -92,6 +107,24 @@ int pClass::MakeStaticMethodTable() {
     return smtp == NULL;
 }
 
+// 构建静态字段表
+void pClass::BuildStaticFields() {
+    staticFieldValue = new void*[static_field_count];
+    for (int k = 0; k < static_field_count; k++) {
+        staticFieldValue[k] = new char[staticField[k]->GetByte()];
+    }
+}
+
+void* pClass::GetIndexStaticField(UInt index) {
+    return staticFieldValue[index];
+}
+
+bool pClass::PutIndexStaticField(UInt index, char* source, int length) {
+    assert(index >= 0 && index < static_field_count);
+    memcpy(staticFieldValue[index], source, length);
+    return true;
+}
+
 ConstantPoolMetaType* pClass::GetConstantPoolItem(int pl_index) {return pcp->GetConstantPoolItem(pl_index);}
 pClass::~pClass() {
     if (vtp != NULL) delete vtp;
@@ -110,10 +143,9 @@ pClass::~pClass() {
 
 MethodEntry* pClass::GetStaticMethod(string nat) {
     pClass* pkl = this;
-    //cout << "NAT: " << nat << endl;
     while (pkl != NULL) {
-        if (pkl->smtp->nameMap.count(nat))
-            return pkl->smtp->entryList[pkl->smtp->nameMap[nat]];
+        if (this->smtp->nameMap.count(nat)) 
+            return this->smtp->entryList[nameMap[nat]];
         pkl = pkl->pFatherClass;
     } 
     return NULL; // 返回NULL，使得Resolve从父类继续解析

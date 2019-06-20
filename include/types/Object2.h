@@ -15,15 +15,16 @@ public:
     ObjectHeader *header;
     Object *prev, *next;
     Object();
-    void Set(pClass*, UInt);
-    Object(pClass *pkl, UInt len) ; /*{
-        header = new ObjectHeader(pkl, len);
-        data = new char[header->length];
-    } */
+    void Object::Set(pClass *pkl, UInt len, UInt da=0, UInt size=0);
+    Object(pClass *pkl, UInt len, UInt da=0, UInt size=0); 
 
     ~Object();
     void Clear();
+    void Jump(int offset);
     bool changeData(void* ptr);
+
+    void* getIndex(int index) ;
+    bool putIndex(int index, char* source, int length) ;
 
     pClass* getClass() ;
     UInt getTotalLength();
@@ -42,5 +43,10 @@ void InitObjectPool(Object* object);
 Object* requestObject();
 // 回收句柄
 bool releaseObject(Object* obj);
+
+Object* MakeMultiArray(pClass* pkl, int* arr, int d);
+Object* MakeMultiObjectArry(int length, int *arr, int d);
+
+bool InitializeObject()
 
 #endif

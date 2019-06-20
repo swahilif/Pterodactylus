@@ -332,17 +332,17 @@ class_attribute::class_attribute(const char* path){
     fread(buffer, 10000, 1, file);
     // magic number
     this->magic = read_u(buffer, 4, &point);
-    printf("magic: %x\n", this->magic);
+    //printf("magic: %x\n", this->magic);
     
     // minor/major version
     this->minor_version = read_u(buffer, 2, &point);
-    printf("minor_version: %x\n", this->minor_version);
+    //printf("minor_version: %x\n", this->minor_version);
     this->major_version = read_u(buffer, 2, &point);
-    printf("major_version: %x\n", this->major_version);
+    //printf("major_version: %x\n", this->major_version);
     
     // constant pool length
     this->constant_pool_count = read_u(buffer, 2, &point);
-    printf("constant pool len: %x\n", this->constant_pool_count);
+    //printf("constant pool len: %x\n", this->constant_pool_count);
     
     // constant pool
     this->constant_pool = new CONSTANT_METATYPE* [constant_pool_count+1];

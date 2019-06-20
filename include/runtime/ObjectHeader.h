@@ -12,6 +12,7 @@ class ObjectHeader {
     bool isArr;
     friend class Object;
 public:
+    bool marked;
     ObjectHeader();
     ObjectHeader(UInt _len); //:pkl(_pkl), length(_len) {}
     UInt getLength() ; //{return length;}

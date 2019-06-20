@@ -60,13 +60,34 @@ FieldEntry::FieldEntry(FIELDINFO* pfi, class_attribute* pkl) {
     descriptor = info.second;
     byte = field_resolve(descriptor);
     name_and_descriptor = name + ":" + descriptor;
+    cout << name << ", " << descriptor << "[]" << byte << endl;
+    cout << name_and_descriptor << endl;
+}
+
+// 将父类字段
+void ReceiveBaseClassField(pClass* pb, pClass* pd, int& fc) {
+    if (pb == NULL) return;
+    for (int k = 0; k < pb->field_count; k++)
+        if (!pb->arrField[k]->ACC_PRIVATE) fc++;
+
+    FieldEntry** naf = new FieldEntry[fc];
+    int index = 0;
+    for (int k = 0; k < pb->field_count; k++)
+        if (!pb->arrField[k]->ACC_PRIVATE) 
+            naf[index++] = pb->arrField[k];
+    for (int k = 0; k < pd->field_count; k++)
+        naf[index++] = pd->arrField[k];
+    delete[] pd->arrField;
+    pd->arrField = naf;
 }
 
 bool MakeFieldTable(std::map<string, int> &ftp, pClass *pkl) {
     if (pkl == NULL or pkl->arrField == NULL) return false;
+    ReceiveBaseClassField(pkl->pFatherClass, pkl, pkl->field_count);
     for (int k = pkl->field_count - 1; k >= 0; k--) {
         if (pkl->arrField[k] != NULL) {
             ftp[pkl->arrField[k]->GetNameAndDescriptor()] = k;
+            cout << "ftp[" << pkl->arrField[k]->GetNameAndDescriptor() <<"] is "<<k << endl;
         }
     }
     pkl->byteGrad.push_back(0);

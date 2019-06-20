@@ -38,7 +38,7 @@ public:
     UInt GetCodeLength(); //{return code_length;}
 
     ~PureCode(); //{delete[] pData;}
-
+    HexCode Jump(int len);
     HexCode GetNextCode(); /*{
         try {
             if (current_pos + 1 >= code_length)
@@ -86,6 +86,7 @@ public:
         }
     } */
 };
+
 
 // [ClassName] PureCodePool
 // 管理PureCode用的索引结构
@@ -215,4 +216,6 @@ public:
 
     UInt GetMethodResPos(); //{ return method_res_pos; }
 };
+extern PureCodePool GenCodePool;
+
 #endif

@@ -8,10 +8,12 @@ StaticMethodTable::StaticMethodTable(pClass* pkl) {
             nameMap[it->GetNameAndDescriptor()] = entryList.size() - 1;
         }
     }
+    //cout << entryList[0] << endl;
 }
 
 MethodEntry* StaticMethodTable::GetStaticMethodEntry(string nat) {
-    if (nameMap.count(nat)) 
+    if (nameMap.count(nat)){
         return entryList[nameMap[nat]];
+    }
     return NULL; // 返回NULL，使得Resolve从父类继续解析
 }

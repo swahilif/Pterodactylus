@@ -15,6 +15,7 @@ class StaticMethodTable {
     MapContainerType nameMap;
     ContainerType entryList;
 public:
+    friend class pClass;
     StaticMethodTable(pClass* pkl) ;/*{
         for (int i=0; i<pkl->method_count; i++) {
             auto *it = pkl->arrMethod[i];

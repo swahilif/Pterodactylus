@@ -1,19 +1,19 @@
 #include <iostream>
+#include <string>
 #include "javap.h"
-#include "ClassLoader.h"
-#include "ClassFile.h"
+#include "../types/ClassLoader.h"
+#include "../types/ClassFile.h"
 #include "MethodPool.h"
 
 #define MAX_THREAD_STACK 10000
 
+using namespace std;
 class VirtualTable;
 class StaticMethodTable;
 class MethodEntry;
 class FieldEntry;
 class ConstantPool;
 
-using UShort = unsigned short;
-using UInt = unsigned short;
 
 class StackFrame{
 public:
@@ -25,7 +25,23 @@ public:
     uint operand_stack_start;   //操作数栈起始位置
     uint stack_top;             //栈顶位置
     uint dynamic_linking;       //存放指向this的指针的位置
+    uint max_locals;
+    uint max_stack;
+    bool* is_obj;
     StackFrame* caller;
     StackFrame(uint max_locals, uint max_stack, StackFrame* _caller);
 };
+
+int parse_param(StackFrame* frame, string type);
+
+
+
+
+
+
+
+
+
+
+
 

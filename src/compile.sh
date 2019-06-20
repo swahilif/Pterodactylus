@@ -10,4 +10,6 @@ g++ VirtualTable.cpp -o VirtualTable.o -c -std=c++11
 g++ interpreter.cpp -o interpreter.o -c -std=c++11
 g++ ClassLoader.cpp -o ClassLoader.o -c -std=c++11
 g++ ClassFile.cpp -o ClassFile.o -c -std=c++11
+g++ GarbageCollect.cpp -o GarbageCollect.o -c -std=c++11
+g++ HeapManager.cpp -o HeapManager.o -c -std=c++11
 g++ *.o -o interpreter -std=c++11

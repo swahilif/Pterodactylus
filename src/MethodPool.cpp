@@ -29,14 +29,20 @@ UInt PureCode::GetCodeLength() {return code_length;}
 
 PureCode::~PureCode() {delete[] pData;}
 
+HexCode PureCode::Jump(int pos) {
+    cout << "Jumping to position " << pos + current_pos << ", current pos is " << current_pos << endl;
+    assert(pos + current_pos >= 0 && current_pos + pos < code_length);
+    this->current_pos += pos;
+}
+
 HexCode PureCode::GetNextCode() {
     try {
-        if (current_pos + 1 >= code_length)
+        if (current_pos + 1 > code_length)
             throw "Access denied! The hex code read exceeds the maximum length.";
         return *(pData+(current_pos++));
-    } catch (char *error_info) {
+    } catch (...) {
 #ifdef DEBUG_CLASS
-        cout << error_info << endl;
+        cout << "1" << endl;
 #endif
     }
     return 0;
@@ -138,6 +144,8 @@ bool MethodEntry::GetAccessFlags(string flag) {
         return ACC_ABSTRACT;
     if (flag == "ACC_NATIVE")
         return ACC_NATIVE;
+    if (flag == "ACC_BRIDGE")
+        return ACC_BRIDGE;
     return false;
 }
 PureCodePool GenCodePool(100);

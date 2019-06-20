@@ -16,7 +16,6 @@ pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf-
             std::string fatherClassName = pcf->get_class_name(pcf->parent_index);
 
             pFatherClass = ClassLoader::findLoadedClass(fatherClassName); // 尝试获取父类 
-            //cout << fatherClassName << " REE " << pFatherClass << endl;
 
             if ((fatherClassName != "java/lang/Object") && pFatherClass == NULL) {
                 ClassLoader::LoadClass(fatherClassName, true);
@@ -43,26 +42,20 @@ pClass::pClass(class_attribute* pcf):ACC_PUBLIC(pcf->ACC_PUBLIC), ACC_FINAL(pcf-
 
             arrMethod = new MethodEntry*[method_count];
             arrField = new FieldEntry*[field_count];
-            //printf("minv %d  majv %d   cpc %d\n", minor_version, major_version, constant_pool_count);
-            //printf("methodcount %d\n", method_count);
 
             for (auto k = method_count - 1; k >= 0; k--) {
                 METHODINFO *pmi = pcf->method_info[k];
                 arrMethod[k] = new MethodEntry(pmi, pcf);
-                //cout << "happy!" << k << endl;
             }
-            //cout << "New" << field_count << endl;
 
             for (auto k = field_count - 1; k >= 0; k--) {
                 FIELDINFO *pfi = pcf->field_info[k];
                 arrField[k] = 
                 new FieldEntry(pfi, pcf);
-                ////cout << "singout!" << k << endl;
-            }           
+            }
 
             MakeFieldTable(ftp, this);
 
-            //cout << "Have made field table." << endl;
 
             // Init the f**ked constant pool
             this->pcp = new ConstantPool(pcf->constant_pool, this->constant_pool_count);
@@ -106,17 +99,6 @@ pClass::~pClass() {
             if (arrField[k] != NULL) delete arrField[k];
         delete[] arrField;
     }
-}
-
-MethodEntry* pClass::GetStaticMethod(string nat) {
-    pClass* pkl = this;
-    //cout << "NAT: " << nat << endl;
-    while (pkl != NULL) {
-        if (pkl->smtp->nameMap.count(nat))
-            return pkl->smtp->entryList[pkl->smtp->nameMap[nat]];
-        pkl = pkl->pFatherClass;
-    } 
-    return NULL; // 返回NULL，使得Resolve从父类继续解析
 }
 
 pClass::pClass() {

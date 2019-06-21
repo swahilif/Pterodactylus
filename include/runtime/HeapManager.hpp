@@ -27,6 +27,7 @@ public:
     uchar* Eden;
     uchar* Survivor;
     bool check_space(ulong len);
+    ulong start;
     //void gc_copy(ulong eden_pos, ulong survivor_pos, int length);
 };
 extern Heap* heap;

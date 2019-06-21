@@ -9,12 +9,13 @@ class Object;
 class ObjectHeader {
     UInt length;   
     int cnt;
-    bool isArr;
     friend class Object;
 public:
+    UInt dArr;
     bool marked;
     ObjectHeader();
-    ObjectHeader(UInt _len); //:pkl(_pkl), length(_len) {}
+    ObjectHeader(UInt _len);
+    ObjectHeader(UInt _len, UInt da); //:pkl(_pkl), length(_len) {}
     UInt getLength() ; //{return length;}
     int getCount();
     int changeCnt(int del);

@@ -10,9 +10,11 @@
 #include "../include/runtime/HeapManager.hpp"
 #include "../include/types/ClassFile.h"
 
+#define DEBUG
 
 // DFS
 void dfs(Object* cur){
+    // 根据数组index和da来循环
     Object* tmp;
     stack<Object*> st;
     st.push(cur);
@@ -20,24 +22,39 @@ void dfs(Object* cur){
         tmp = st.top();
         st.pop();
         tmp->header->marked = 1;
-        /*这里应取出tmp对应的pclass里的bool数组并把所有指向handler的指针压栈。此处注意判定marked是否为1*/
-        FieldEntry** pF = tmp->getClass()->arrField;
-        for (int i = 0; i < tmp->getClass()->field_count; i ++){
+        if (tmp->header->dArr){
 #ifdef DEBUG
-            cout << "During DFS: field " << i << endl;
+            cout << "It is an array object, value array excluded." << endl;
 #endif
-            if (pF[i]->isObject()){
-                string nat = pF[i]->GetNameAndDescriptor();
-#ifdef DEBUG
-                cout << "Attribute " << i << " is object, its name is " << nat << endl;
-#endif
-                void* ptr = tmp->getField(nat);
-                Object* attr = (Object*)*(long*)ptr;
-#ifdef DEBUG
-                cout << "Get field succeed! Its address is " << (long)attr << endl;
-#endif
-                if (attr && !attr->header->marked)
-                    st.push(attr);
+            if (tmp->header->dArr == 1 && tmp->getClass() == NULL)
+                continue;
+            for (int i = 0; i < tmp->size; i ++){
+                Object* attr = (Object*)tmp->getIndex(i, 'L');
+                cout << "SubArray " << (long)attr << " marked." << endl;
+                st.push(attr);
+            }
+        }
+        else{
+            /*这里应取出tmp对应的pclass里的bool数组并把所有指向handler的指针压栈。此处注意判定marked是否为1*/
+            cout << "It is a normal object or value array." << endl;
+            FieldEntry** pF = tmp->getClass()->arrField;
+            for (int i = 0; i < tmp->getClass()->field_count; i ++){
+    #ifdef DEBUG
+                cout << "During DFS: field " << i << endl;
+    #endif
+                if (pF[i]->isObject()){
+                    string nat = pF[i]->GetNameAndDescriptor();
+    #ifdef DEBUG
+                    cout << "Attribute " << i << " is object, its name is " << nat << endl;
+    #endif
+                    void* ptr = tmp->getField(nat);
+                    Object* attr = (Object*)*(long*)ptr;
+    #ifdef DEBUG
+                    cout << "Get field succeed! Its address is " << (long)attr << endl;
+    #endif
+                    if (attr && !attr->header->marked)
+                        st.push(attr);
+                }
             }
         }
     }
@@ -51,7 +68,8 @@ void GC_mark(Object* folink, Heap* heap){
     Object* cur = folink;
     while (cur != NULL){
 #ifdef DEBUG
-        cout << "Traverse handler " << (long)cur << " ! Its count is:" << cur->header->getCount() << endl;
+        cout << "Traverse handler " << (long)cur << " ! Its count is:" << cur->header->getCount();
+        cout << " Pos in Heap: " << (long)(cur->getData()) - 8 - heap->start << endl;
 #endif
         if (cur->header->getCount() > 0)
             dfs(cur);
@@ -64,11 +82,20 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
     bool end = 0;
     ulong pos = 0;
     ulong total_length = heap->max_heap_size;
+    ulong length;
     while(1){
         void* data = heap->get_object(pos);
+        cout << "Now offset: " << pos << endl;
         Object* obj = (Object*)(*(ulong*)data);
         cout << "obj " << (long)obj << endl;
-        ulong length = obj->getTotalLength();
+        if ((long)obj == 0)
+            break;
+        if (obj->header->dArr == 0){
+            length = obj->getTotalLength();
+        }
+        else {
+            length = obj->getTotalSize();
+        }
 
 #ifdef DEBUG
         cout << "obj " << (long)obj << " Its length is: " << length;
@@ -91,8 +118,8 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
         }
         obj->header->marked = 0;
         pos += length + 8;
-        if (pos >= total_length - last_obj_length)
-            break;
+        //if (pos >= total_length - last_obj_length)
+        //    break;
     }
     uchar* tmp;
     tmp = heap->Eden;
@@ -100,4 +127,5 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
     heap->Survivor = tmp;
     heap->Eden_offset = heap->Survivor_offset;
     heap->Survivor_offset = 0;
+    memset(heap->Survivor, 0, heap->max_heap_size);
 }

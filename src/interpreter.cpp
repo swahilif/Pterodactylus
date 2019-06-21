@@ -47,7 +47,7 @@ int parse_param(string type){
 #endif
     int start_pos = type.find('(');
     int end_pos = type.find(')');
-    string params = type.substr(start_pos+1, end_pos-1);
+    string params = type.substr(star    t_pos+1, end_pos-1);
     int count = 0;
     int pos = 0;
     int length = params.length();
@@ -189,6 +189,28 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 thread_stack[--frame->stack_top] = res;
                 break;
             }
+            // aaload
+            case (0x32):{
+                int num = thread_stack[frame->stack_top--];
+                cout << "aaload, index: " << num;
+                Object* array = (Object*)thread_stack[frame->stack_top--];
+                Object* res = (Object*)array->getIndex(num, 'L');
+                cout << " Obj Address: " << (long)res << endl;
+                thread_stack[++frame->stack_top] = (long)res;
+                break;
+            }
+            // iaload
+            case (0x2e):{
+                int num = thread_stack[frame->stack_top--];
+                Object* array = (Object*)thread_stack[frame->stack_top--];
+#ifdef DEBUG
+                cout << "Array to get: " << (long)array << endl;
+#endif
+                cout << "iaload, index: " << num << endl;
+                int res = *(int*)(array->getIndex(num, 'I'));
+                thread_stack[++frame->stack_top] = res;
+                break;
+            }
             // aload
             case (0x19):{
                 tmp = cc->GetNextCode();
@@ -203,6 +225,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // aload_1
             case (0x2b):{
+
                 thread_stack[frame->stack_top+1] = thread_stack[frame->local_variable_table+1];
                 frame->stack_top++;
                 break;
@@ -239,7 +262,6 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             }
             // iload_2
             case (0x1c):{
-                cout << "ILOAD2: " << thread_stack[frame->local_variable_table+2] << endl;
                 thread_stack[frame->stack_top+1] = thread_stack[frame->local_variable_table+2];
                 frame->stack_top++;
                 break;
@@ -274,6 +296,28 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 frame->stack_top++;
                 break;
             }
+            // iastore
+            case (0x4f):{
+                int num = thread_stack[frame->stack_top--];
+                int index = thread_stack[frame->stack_top--];
+                Object* array = (Object*)thread_stack[frame->stack_top--];
+                array->putIndex(index, (char*)&num, 4);
+                cout << "Put number " << num << " into index " << index << " of array " << (long)array << endl;
+                break;
+            }
+            // aastore
+            case (0x53):{
+                Object* new_obj = (Object*)thread_stack[frame->stack_top--];
+                int index = thread_stack[frame->stack_top--];
+                Object* array = (Object*)thread_stack[frame->stack_top--];
+                cout << "AASTORE " << (long)new_obj << " into " << (long)array << endl;
+                Object* tmp = (Object*)array->getIndex(index, 'L');
+                cout << "Double Check  new object: " << (long)tmp << endl;
+                array->putIndex(index, (char*)&new_obj, array->header->getLength());
+                tmp = (Object*)array->getIndex(index, 'L');
+                cout << "Triple Check  new object: " << (long)tmp << endl;
+                break;
+            }
             // astore [indexbyte]
             case (0x3a):{
                 tmp = cc->GetNextCode();
@@ -281,7 +325,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 cout << "Slot index: " << int(tmp) << endl;
 #endif
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+tmp];
-                if (old_obj != NULL)
+                if (old_obj != NULL&& frame->is_obj[tmp])
                     old_obj->header->changeCnt(-1);
                 Object* new_obj = (Object*)thread_stack[frame->stack_top];
                 new_obj->header->changeCnt(1);
@@ -292,7 +336,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // astore_0
             case (0x4b):{
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table];
-                if (old_obj != NULL)
+                if (old_obj != NULL && frame->is_obj[0])
                     old_obj->header->changeCnt(-1);
                 Object* new_obj = (Object*)thread_stack[frame->stack_top];
                 new_obj->header->changeCnt(1);
@@ -304,7 +348,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // astore_1
             case (0x4c):{
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+1];
-                if (old_obj != NULL){
+                if (old_obj != NULL && frame->is_obj[1]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
                     cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
@@ -323,7 +367,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // astore_2
             case (0x4d):{
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+2];
-                if (old_obj != NULL){
+                if (old_obj != NULL&& frame->is_obj[2]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
                     cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
@@ -343,7 +387,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             case (0x4e):{
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+3];
                 cout << "Address of the old object: " << (long)old_obj << endl;
-                if (old_obj != NULL){
+                if (old_obj != NULL && frame->is_obj[3]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
                     cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
@@ -546,7 +590,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
                 cout << "offset: " << offset << endl;
-                frame->stack_top -= 2;
+                //frame->stack_top -= 2;
                 cc->Jump(offset-3);
                 break;
             }
@@ -628,6 +672,125 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
 #ifdef DEBUG
                 cout << "Address: " << (ulong)new_obj << endl;
 #endif
+                break;
+            }
+            // newarray [atype]
+            case(0xbc):{
+                tmp = cc->GetNextCode();
+                // atype == int
+                if (tmp == 10){
+                    int length = thread_stack[frame->stack_top--];
+                    int* dim = new int[1];
+                    dim[0] = length;
+                    int total_size = 0;
+                    total_size = length * 4;
+                    total_size += 8;
+                    bool succeed = heap->check_space(total_size);
+                    if (!succeed){
+                        cout << "Out Of Memory!" << endl;
+                        exit(0);
+                    }
+                    Object* array = MakeMultiArray(4, dim, 1);
+                    thread_stack[++frame->stack_top] = (ulong)array;
+#ifdef DEBUG
+                    cout << "New INT array created. Address: " << (ulong)array << endl;
+#endif
+                }
+                break;
+            }
+            // anewarray [index1 index2]
+            case(0xbd):{
+                tmp = cc->GetNextCode();
+                tmp = cc->GetNextCode();
+                ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
+                //item -> resolved(cl->pcp);
+                string class_name = *(string*)item->GetValue();
+#ifdef DEBUG
+                cout << "Created a new array of type: " << class_name << endl;
+#endif
+                pClass* new_class = ClassLoader::findLoadedClass(class_name);
+                if (!new_class){
+                    if(!ClassLoader::LoadClass(class_name, 1))
+                        throw "Load Class Failed!";
+                    new_class = ClassLoader::findLoadedClass(class_name);
+                }
+                int length = thread_stack[frame->stack_top--];
+                int* dim = new int[1];
+                dim[0] = length;
+                Object* array = MakeMultiObjectArray(new_class, dim, 1);
+                thread_stack[++frame->stack_top] = (long)array;
+                break;
+            }
+            // multianewarray [index1 index2 dimension]
+            case(0xc5):{
+                tmp = cc->GetNextCode();
+                int index = cc->GetNextCode();
+                int dim = cc->GetNextCode();
+                int product = 1;
+                int total_size = 8;
+#ifdef DEBUG
+                cout << "DIM: " << dim << endl;
+                cout << "index: " << index << endl;
+#endif
+                int* dimensions = new int[dim];
+                int cur_dim = 0;
+                for(int k = 0; k < dim; k ++){
+                    
+                    cur_dim = thread_stack[frame->stack_top--];
+                    dimensions[dim-k-1] = cur_dim;
+                    product *= cur_dim;
+                    if (k < dim-1){
+                        total_size += product * 8;
+                    }
+                }
+                ConstantPoolMetaType* item = cl->GetConstantPoolItem(index);
+                //item -> resolved(cl->pcp);
+                string full_name = *(string*)item->GetValue();
+                cout << "Full Name: " << full_name << endl;
+                char type;
+                int pos = 0;
+                int length = full_name.length();
+                while(pos < length){
+                    if (full_name[pos] == '[')
+                        pos ++;
+                    else{
+                        type = full_name[pos];
+                        break;
+                    }
+                }
+                if (type == 'I'){
+                    total_size += product * 4 + product / dimensions[dim-1] * 8;
+                    bool succeed = heap->check_space(total_size);
+                    if (!succeed){
+                        cout << "Out Of Memory!" << endl;
+                        exit(0);
+                    }
+                    Object* array = MakeMultiArray(4, dimensions, dim);
+                    thread_stack[++frame->stack_top] = (ulong)array;
+                    cout << "TOTAL SIZE: " << total_size << endl;
+                    
+#ifdef DEBUG
+                    cout << "New Multi-dimensional INT array created. Address: " << (ulong)array << endl;
+#endif
+                }
+                else if (type == 'L'){
+                    total_size += product * 4 + product / dimensions[dim-1] * 8;
+                    string class_name = full_name.substr(pos+1, full_name.length()-pos-2);
+#ifdef DEBUG
+                    cout << "Created a new array of type: " << class_name << endl;
+#endif
+                    pClass* new_class = ClassLoader::findLoadedClass(class_name);
+                    if (!new_class){
+                        if(!ClassLoader::LoadClass(class_name, 1))
+                            throw "Load Class Failed!";
+                        new_class = ClassLoader::findLoadedClass(class_name);
+                    }
+                    Object* array = MakeMultiObjectArray(new_class, dimensions, dim);
+                    thread_stack[++frame->stack_top] = (ulong)array;
+#ifdef DEBUG
+                    cout << "New Multi-dimensional Object array created. Address: " << (ulong)array << endl;
+#endif
+                }
                 break;
             }
             // getstatic [indexbyte1 indexbyte2]
@@ -777,27 +940,23 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 cout << "Class name: " << class_name << endl;
                 pClass* new_cl = ClassLoader::findLoadedClass(class_name);
                 pClass* dau_cl = ClassLoader::findLoadedClass("daughter");
+#ifdef DEBUG
                 cout << "Father Add: " << (long)new_cl << " Daughter Add: " << (long)dau_cl << endl;
                 cout << "New cl: " << (long)new_cl << " Old cl: " << (long)cl << endl;
+#endif
                 string nat = full_name.substr(pos+1, full_name.length() - pos + 1);
+#ifdef DEBUG
                 cout << "Nat: " << nat << endl;
+#endif
                 ulong type_pos = nat.find(':');
                 string type = nat.substr(type_pos+1, nat.length() - type_pos);
                 int param_count = parse_param(type);
-                //StaticMethodTable* smtp = cl->smtp;
-                //MethodEntry* new_method = smtp->GetStaticMethodEntry(nat);
                 MethodEntry* new_method = new_cl->GetStaticMethod(nat);
-                cout << new_method->GetMethodResPos() << endl;
-                //MethodEntry* father_method =
-                //cout << "Address 1:" << (long)new_method << "  Address 2: " << (long)another_method << endl;
                 StackFrame* new_frame = set_new_stack_frame(new_method, frame);
                 for (int j = 0; j < param_count; j ++){
                     cout << "Params: " << thread_stack[frame->stack_top+1-param_count+j] << endl;
                     thread_stack[new_frame->local_variable_table+j] = thread_stack[frame->stack_top+1-param_count+j];
                 }
-#ifdef DEBUG
-                cout << "Here!" << endl;
-#endif
                 frame->stack_top -= param_count;
                 interpret(new_method, new_cl, new_frame, thread_stack);
                 break;

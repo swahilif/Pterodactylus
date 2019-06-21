@@ -66,7 +66,7 @@ bool ConstantPool::ResolveCLS() {
         if (cpm[k]->GetInstanceType() == CONS_CLASS) {
             auto tmp = reinterpret_cast<ConstantPoolValueType*>(cpm[k]);
             tmp->value = (string*) cpm[*(UShort*)tmp->value]->GetValue();
-            cout << "Constant Pool VALUE Checking: " << *(string*)tmp->value << endl;
+            //cout << "Constant Pool VALUE Checking: " << *(string*)tmp->value << endl;
         }
     }
 }
@@ -76,7 +76,7 @@ bool ConstantPool::ResolveNAT() {
         if (cpm[k]->GetInstanceType() == CONS_NAME_TYPE) {
             auto tmp = reinterpret_cast<ConstantPoolNAT*>(cpm[k]);
             tmp->nat = *(string*)cpm[tmp->name_index]->GetValue() + ":" + *(string*)cpm[tmp->descriptor_index]->GetValue();
-            cout << "Constant Pool NAT Checking: " << tmp->nat << endl;
+            //cout << "Constant Pool NAT Checking: " << tmp->nat << endl;
         }
     }
 }
@@ -86,7 +86,7 @@ bool ConstantPool::ResolveRef() {
         if (cpm[k]->GetInstanceType() == CONS_FIELD || cpm[k]->GetInstanceType() == CONS_METHOD || cpm[k]->GetInstanceType() == CONS_INTERFACE) {
             auto tmp = reinterpret_cast<ConstantPoolRefType*>(cpm[k]);
             tmp->nat = *(string*)cpm[tmp->class_index]->GetValue() + "." + cpm[tmp->entry_index]->GetNameAndType();
-            cout << "Constant Pool Ref Checking: " << tmp->nat << endl;
+            //cout << "Constant Pool Ref Checking: " << tmp->nat << endl;
 
             //tmp->value = (string*) cpm[tmp->value]->GetValue();
         }
@@ -105,7 +105,7 @@ ConstantPool::ConstantPool(CONSTANT_METATYPE** pcm, UShort ConstantPoolCount) {
         auto instype = pcm[i]->get_instance_type();
         if (instype == CONS_METATYPE) throw "ConstantPool can't have any CONS_METATYPE entry!";
         if (instype == CONS_UTF8) {
-            printf("CONS_UTF8  %s  \n", (*(string*)pcm[i]->get_value()).c_str());
+            //printf("CONS_UTF8  %s  \n", (*(string*)pcm[i]->get_value()).c_str());
             cpm[i] = new ConstantPoolValueType(pcm[i]->get_value(), instype); 
         } else if (instype == CONS_INTEGER || instype == CONS_FLOAT || instype == CONS_LONG || instype == CONS_DOUBLE || instype == CONS_STRING) {
             cpm[i] = new ConstantPoolValueType(pcm[i]->get_value(), instype);

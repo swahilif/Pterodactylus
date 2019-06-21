@@ -1,0 +1,1361 @@
+../javacode/
+==================
+ACCESS PRIVELIGFE :1 0 0
+ACCESS PRIVELIGFE :1 0 0
+==================
+object_array
+Code length: 112
+Code: 6
+Code: 10
+Bipush 10
+Code: c5
+DIM: 2
+index: 2
+Full Name: [[LA;
+Created a new array of type: A
+ACCESS PRIVELIGFE :0 0 0
+30 <-  TotalSize
+480 bits required! Current ptr pos: 480
+Required Heap Length: 480
+Current Pos: 480
+32 bits required! Current ptr pos: 512
+Required Heap Length: 32
+Current Pos: 512
+88 bits required! Current ptr pos: 600
+Required Heap Length: 88
+Current Pos: 600
+88 bits required! Current ptr pos: 688
+Required Heap Length: 88
+Current Pos: 688
+88 bits required! Current ptr pos: 776
+Required Heap Length: 88
+Current Pos: 776
+New Multi-dimensional Object array created. Address: 4332976960
+Code: 4c
+New object 4332976960 got updated! Its new count is: 1
+Code: 2b
+Code: 4
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 5
+Code: 32
+aaload, index: 2 Obj Address: 4332977728
+Code: 11
+Code: b5
+TYPE: I
+VALUE: 200
+Code: 10
+Bipush 10
+Code: bd
+Created a new array of type: A
+10 <-  TotalSize
+160 bits required! Current ptr pos: 936
+Required Heap Length: 160
+Current Pos: 936
+88 bits required! Current ptr pos: 1024
+Required Heap Length: 88
+Current Pos: 1024
+Code: 4d
+New object 4332978592 got updated! Its new count is: 1
+Code: 3
+Code: 3e
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 0 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978640
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 0
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 1 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332978688
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 1
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 2 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332978736
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 2
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 3 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 3 Obj Address: 4332978784
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 3
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 4 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 4 Obj Address: 4332978832
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 4
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 5 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 5 Obj Address: 4332978880
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 5
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 6 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 6 Obj Address: 4332978928
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 6
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 7 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 7 Obj Address: 4332978976
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 7
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 8 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 8 Obj Address: 4332979024
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 8
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 9 and 10
+Code: 2c
+Code: 1d
+Code: 32
+aaload, index: 9 Obj Address: 4332979072
+Code: 1d
+Code: b5
+TYPE: I
+VALUE: 9
+Code: 84
+Code: a7
+offset: -16
+Code: 1d
+Code: 10
+Bipush 10
+Code: a2
+offset: 16
+Comparing two numbers 10 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2c
+Code: 6
+Code: 32
+aaload, index: 3 Obj Address: 4332978784
+Code: b4
+NAT: m:I
+OBJ Address: 4332978784
+Code: b6
+3
+Code: 2b
+Code: 3
+Code: 2c
+Code: 53
+AASTORE 4332978592 into 4332976960
+Double Check  new object: 4332977008
+Triple Check  new object: 4332978592
+Code: 3
+Code: 3e
+Code: 1d
+Code: 6
+Code: a2
+offset: 40
+Comparing two numbers 0 and 3
+Code: 3
+Code: 36
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 0 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 0 Obj Address: 4332978640
+Code: b4
+NAT: m:I
+OBJ Address: 4332978640
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 1 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 1 Obj Address: 4332978688
+Code: b4
+NAT: m:I
+OBJ Address: 4332978688
+Code: b6
+1
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 2 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 2 Obj Address: 4332978736
+Code: b4
+NAT: m:I
+OBJ Address: 4332978736
+Code: b6
+2
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 3 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 3 Obj Address: 4332978784
+Code: b4
+NAT: m:I
+OBJ Address: 4332978784
+Code: b6
+3
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 4 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 4 Obj Address: 4332978832
+Code: b4
+NAT: m:I
+OBJ Address: 4332978832
+Code: b6
+4
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 5 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 5 Obj Address: 4332978880
+Code: b4
+NAT: m:I
+OBJ Address: 4332978880
+Code: b6
+5
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 6 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 6 Obj Address: 4332978928
+Code: b4
+NAT: m:I
+OBJ Address: 4332978928
+Code: b6
+6
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 7 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 7 Obj Address: 4332978976
+Code: b4
+NAT: m:I
+OBJ Address: 4332978976
+Code: b6
+7
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 8 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 8 Obj Address: 4332979024
+Code: b4
+NAT: m:I
+OBJ Address: 4332979024
+Code: b6
+8
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 9 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 0 Obj Address: 4332978592
+Code: 15
+Code: 32
+aaload, index: 9 Obj Address: 4332979072
+Code: b4
+NAT: m:I
+OBJ Address: 4332979072
+Code: b6
+9
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 10 and 10
+Code: 84
+Code: a7
+offset: -39
+Code: 1d
+Code: 6
+Code: a2
+offset: 40
+Comparing two numbers 1 and 3
+Code: 3
+Code: 36
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 0 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 0 Obj Address: 4332977632
+Code: b4
+NAT: m:I
+OBJ Address: 4332977632
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 1 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 1 Obj Address: 4332977680
+Code: b4
+NAT: m:I
+OBJ Address: 4332977680
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 2 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 2 Obj Address: 4332977728
+Code: b4
+NAT: m:I
+OBJ Address: 4332977728
+Code: b6
+200
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 3 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 3 Obj Address: 4332977776
+Code: b4
+NAT: m:I
+OBJ Address: 4332977776
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 4 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 4 Obj Address: 4332977824
+Code: b4
+NAT: m:I
+OBJ Address: 4332977824
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 5 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 5 Obj Address: 4332977872
+Code: b4
+NAT: m:I
+OBJ Address: 4332977872
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 6 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 6 Obj Address: 4332977920
+Code: b4
+NAT: m:I
+OBJ Address: 4332977920
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 7 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 7 Obj Address: 4332977968
+Code: b4
+NAT: m:I
+OBJ Address: 4332977968
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 8 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 8 Obj Address: 4332978016
+Code: b4
+NAT: m:I
+OBJ Address: 4332978016
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 9 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 1 Obj Address: 4332977056
+Code: 15
+Code: 32
+aaload, index: 9 Obj Address: 4332978064
+Code: b4
+NAT: m:I
+OBJ Address: 4332978064
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 10 and 10
+Code: 84
+Code: a7
+offset: -39
+Code: 1d
+Code: 6
+Code: a2
+offset: 40
+Comparing two numbers 2 and 3
+Code: 3
+Code: 36
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 0 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 0 Obj Address: 4332978112
+Code: b4
+NAT: m:I
+OBJ Address: 4332978112
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 1 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 1 Obj Address: 4332978160
+Code: b4
+NAT: m:I
+OBJ Address: 4332978160
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 2 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 2 Obj Address: 4332978208
+Code: b4
+NAT: m:I
+OBJ Address: 4332978208
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 3 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 3 Obj Address: 4332978256
+Code: b4
+NAT: m:I
+OBJ Address: 4332978256
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 4 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 4 Obj Address: 4332978304
+Code: b4
+NAT: m:I
+OBJ Address: 4332978304
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 5 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 5 Obj Address: 4332978352
+Code: b4
+NAT: m:I
+OBJ Address: 4332978352
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 6 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 6 Obj Address: 4332978400
+Code: b4
+NAT: m:I
+OBJ Address: 4332978400
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 7 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 7 Obj Address: 4332978448
+Code: b4
+NAT: m:I
+OBJ Address: 4332978448
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 8 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 8 Obj Address: 4332978496
+Code: b4
+NAT: m:I
+OBJ Address: 4332978496
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 9 and 10
+Code: b2
+Full Name: java/lang/System.out:Ljava/io/PrintStream;
+Code: 2b
+Code: 1d
+Code: 32
+aaload, index: 2 Obj Address: 4332977104
+Code: 15
+Code: 32
+aaload, index: 9 Obj Address: 4332978544
+Code: b4
+NAT: m:I
+OBJ Address: 4332978544
+Code: b6
+0
+Code: 84
+Code: a7
+offset: -25
+Code: 15
+Code: 10
+Bipush 10
+Code: a2
+offset: 24
+Comparing two numbers 10 and 10
+Code: 84
+Code: a7
+offset: -39
+Code: 1d
+Code: 6
+Code: a2
+offset: 40
+Comparing two numbers 3 and 3
+Code: 10
+Bipush 30
+Code: bc
+Eden offset: 1024
+Garbage Collection triggered!
+Traverse handler 4332979072 ! Its count is:0 Pos in Heap: 920
+Traverse handler 4332979024 ! Its count is:0 Pos in Heap: 904
+Traverse handler 4332978976 ! Its count is:0 Pos in Heap: 888
+Traverse handler 4332978928 ! Its count is:0 Pos in Heap: 872
+Traverse handler 4332978880 ! Its count is:0 Pos in Heap: 856
+Traverse handler 4332978832 ! Its count is:0 Pos in Heap: 840
+Traverse handler 4332978784 ! Its count is:0 Pos in Heap: 824
+Traverse handler 4332978736 ! Its count is:0 Pos in Heap: 808
+Traverse handler 4332978688 ! Its count is:0 Pos in Heap: 792
+Traverse handler 4332978640 ! Its count is:0 Pos in Heap: 776
+Traverse handler 4332978592 ! Its count is:1 Pos in Heap: 936
+It is an array object, value array excluded.
+SubArray 4332978640 marked.
+SubArray 4332978688 marked.
+SubArray 4332978736 marked.
+SubArray 4332978784 marked.
+SubArray 4332978832 marked.
+SubArray 4332978880 marked.
+SubArray 4332978928 marked.
+SubArray 4332978976 marked.
+SubArray 4332979024 marked.
+SubArray 4332979072 marked.
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+Traverse handler 4332978544 ! Its count is:0 Pos in Heap: 464
+Traverse handler 4332978496 ! Its count is:0 Pos in Heap: 448
+Traverse handler 4332978448 ! Its count is:0 Pos in Heap: 432
+Traverse handler 4332978400 ! Its count is:0 Pos in Heap: 416
+Traverse handler 4332978352 ! Its count is:0 Pos in Heap: 400
+Traverse handler 4332978304 ! Its count is:0 Pos in Heap: 384
+Traverse handler 4332978256 ! Its count is:0 Pos in Heap: 368
+Traverse handler 4332978208 ! Its count is:0 Pos in Heap: 352
+Traverse handler 4332978160 ! Its count is:0 Pos in Heap: 336
+Traverse handler 4332978112 ! Its count is:0 Pos in Heap: 320
+Traverse handler 4332978064 ! Its count is:0 Pos in Heap: 304
+Traverse handler 4332978016 ! Its count is:0 Pos in Heap: 288
+Traverse handler 4332977968 ! Its count is:0 Pos in Heap: 272
+Traverse handler 4332977920 ! Its count is:0 Pos in Heap: 256
+Traverse handler 4332977872 ! Its count is:0 Pos in Heap: 240
+Traverse handler 4332977824 ! Its count is:0 Pos in Heap: 224
+Traverse handler 4332977776 ! Its count is:0 Pos in Heap: 208
+Traverse handler 4332977728 ! Its count is:0 Pos in Heap: 192
+Traverse handler 4332977680 ! Its count is:0 Pos in Heap: 176
+Traverse handler 4332977632 ! Its count is:0 Pos in Heap: 160
+Traverse handler 4332977584 ! Its count is:0 Pos in Heap: 144
+Traverse handler 4332977536 ! Its count is:0 Pos in Heap: 128
+Traverse handler 4332977488 ! Its count is:0 Pos in Heap: 112
+Traverse handler 4332977440 ! Its count is:0 Pos in Heap: 96
+Traverse handler 4332977392 ! Its count is:0 Pos in Heap: 80
+Traverse handler 4332977344 ! Its count is:0 Pos in Heap: 64
+Traverse handler 4332977296 ! Its count is:0 Pos in Heap: 48
+Traverse handler 4332977248 ! Its count is:0 Pos in Heap: 32
+Traverse handler 4332977200 ! Its count is:0 Pos in Heap: 16
+Traverse handler 4332977152 ! Its count is:0 Pos in Heap: 0
+Traverse handler 4332977104 ! Its count is:0 Pos in Heap: 688
+Traverse handler 4332977056 ! Its count is:0 Pos in Heap: 600
+Traverse handler 4332977008 ! Its count is:0 Pos in Heap: 512
+Traverse handler 4332976960 ! Its count is:1 Pos in Heap: 480
+It is an array object, value array excluded.
+SubArray 4332978592 marked.
+SubArray 4332977056 marked.
+SubArray 4332977104 marked.
+It is an array object, value array excluded.
+SubArray 4332978112 marked.
+SubArray 4332978160 marked.
+SubArray 4332978208 marked.
+SubArray 4332978256 marked.
+SubArray 4332978304 marked.
+SubArray 4332978352 marked.
+SubArray 4332978400 marked.
+SubArray 4332978448 marked.
+SubArray 4332978496 marked.
+SubArray 4332978544 marked.
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is an array object, value array excluded.
+SubArray 4332977632 marked.
+SubArray 4332977680 marked.
+SubArray 4332977728 marked.
+SubArray 4332977776 marked.
+SubArray 4332977824 marked.
+SubArray 4332977872 marked.
+SubArray 4332977920 marked.
+SubArray 4332977968 marked.
+SubArray 4332978016 marked.
+SubArray 4332978064 marked.
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is an array object, value array excluded.
+SubArray 4332978640 marked.
+SubArray 4332978688 marked.
+SubArray 4332978736 marked.
+SubArray 4332978784 marked.
+SubArray 4332978832 marked.
+SubArray 4332978880 marked.
+SubArray 4332978928 marked.
+SubArray 4332978976 marked.
+SubArray 4332979024 marked.
+SubArray 4332979072 marked.
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+It is a normal object or value array.
+During DFS: field 0
+During DFS: field 1
+Now offset: 0
+obj 4332977152
+obj 4332977152 Its length is: 8 It is swepted.
+Now offset: 16
+obj 4332977200
+obj 4332977200 Its length is: 8 It is swepted.
+Now offset: 32
+obj 4332977248
+obj 4332977248 Its length is: 8 It is swepted.
+Now offset: 48
+obj 4332977296
+obj 4332977296 Its length is: 8 It is swepted.
+Now offset: 64
+obj 4332977344
+obj 4332977344 Its length is: 8 It is swepted.
+Now offset: 80
+obj 4332977392
+obj 4332977392 Its length is: 8 It is swepted.
+Now offset: 96
+obj 4332977440
+obj 4332977440 Its length is: 8 It is swepted.
+Now offset: 112
+obj 4332977488
+obj 4332977488 Its length is: 8 It is swepted.
+Now offset: 128
+obj 4332977536
+obj 4332977536 Its length is: 8 It is swepted.
+Now offset: 144
+obj 4332977584
+obj 4332977584 Its length is: 8 It is swepted.
+Now offset: 160
+obj 4332977632
+obj 4332977632 Its length is: 8 It is kept.
+Now offset: 176
+obj 4332977680
+obj 4332977680 Its length is: 8 It is kept.
+Now offset: 192
+obj 4332977728
+obj 4332977728 Its length is: 8 It is kept.
+Now offset: 208
+obj 4332977776
+obj 4332977776 Its length is: 8 It is kept.
+Now offset: 224
+obj 4332977824
+obj 4332977824 Its length is: 8 It is kept.
+Now offset: 240
+obj 4332977872
+obj 4332977872 Its length is: 8 It is kept.
+Now offset: 256
+obj 4332977632
+obj 4332977632 Its length is: 8 It is swepted.
+Now offset: 272
+obj 4332977680
+obj 4332977680 Its length is: 8 It is swepted.
+Now offset: 288
+obj 4332977728
+obj 4332977728 Its length is: 8 It is swepted.
+Now offset: 304
+obj 4332977776
+obj 4332977776 Its length is: 8 It is swepted.
+Now offset: 320
+obj 4332977824
+obj 4332977824 Its length is: 8 It is swepted.
+Now offset: 336
+obj 4332977872
+obj 4332977872 Its length is: 8 It is swepted.
+Now offset: 352
+obj 4332978208
+obj 4332978208 Its length is: 8 It is kept.
+Now offset: 368
+obj 4332978256
+obj 4332978256 Its length is: 8 It is kept.
+Now offset: 384
+obj 4332978304
+obj 4332978304 Its length is: 8 It is kept.
+Now offset: 400
+obj 4332978352
+obj 4332978352 Its length is: 8 It is kept.
+Now offset: 416
+obj 4332978400
+obj 4332978400 Its length is: 8 It is kept.
+Now offset: 432
+obj 4332978448
+obj 4332978448 Its length is: 8 It is kept.
+Now offset: 448
+obj 4332978496
+obj 4332978496 Its length is: 8 It is kept.
+Now offset: 464
+obj 4332978544
+obj 4332978544 Its length is: 8 It is kept.
+Now offset: 480
+obj 4332976960
+Size: 3 8
+obj 4332976960 Its length is: 24 It is kept.
+Now offset: 512
+obj 4332977008
+Size: 10 8
+obj 4332977008 Its length is: 80 It is swepted.
+Now offset: 600
+obj 4332977056
+Size: 10 8
+obj 4332977056 Its length is: 80 It is kept.
+Now offset: 688
+obj 4332977104
+Size: 10 8
+obj 4332977104 Its length is: 80 It is kept.
+Now offset: 776
+obj 4332978640
+obj 4332978640 Its length is: 8 It is kept.
+Now offset: 792
+obj 4332978688
+obj 4332978688 Its length is: 8 It is kept.
+Now offset: 808
+obj 4332978736
+obj 4332978736 Its length is: 8 It is kept.
+Now offset: 824
+obj 4332978784
+obj 4332978784 Its length is: 8 It is kept.
+Now offset: 840
+obj 4332978832
+obj 4332978832 Its length is: 8 It is kept.
+Now offset: 856
+obj 4332978880
+obj 4332978880 Its length is: 8 It is kept.
+Now offset: 872
+obj 4332978928
+obj 4332978928 Its length is: 8 It is kept.
+Now offset: 888
+obj 4332978976
+obj 4332978976 Its length is: 8 It is kept.
+Now offset: 904
+obj 4332979024
+obj 4332979024 Its length is: 8 It is kept.
+Now offset: 920
+obj 4332979072
+obj 4332979072 Its length is: 8 It is kept.
+Now offset: 936
+obj 4332978592
+Size: 10 8
+obj 4332978592 Its length is: 80 It is kept.
+Now offset: 1024
+obj 0
+Out Of Memory!

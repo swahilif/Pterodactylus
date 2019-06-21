@@ -22,7 +22,7 @@ HexCode CodeCursor::GetNextCode() {
         return *(cursor_pc->pData+(current_pos++));
     } catch (...) {
 #ifdef DEBUG_CLASS
-        cout << "1" << endl;
+        //cout << "1" << endl;
 #endif
     }
     return 0;
@@ -49,14 +49,14 @@ PureCode::PureCode(CODE* pCode) {
     code_length = pCode->code_length;
     attributes_count = pCode->attributes_count;
 
-    cout << "Enter into the pCode!" << endl;
-    cout << max_stack << " " << max_locals << " " << code_length << endl;
+    ////cout << "Enter into the pCode!" << endl;
+    //cout << max_stack << " " << max_locals << " " << code_length << endl;
 
     for (auto x = 0; x < code_length; x++) {
         *(pData+x) = *(pCode->code+x);
-        cout << "x:"<<x<<", HEX:"<<int(*(pData+x))<<endl;
+        //cout << "x:"<<x<<", HEX:"<<int(*(pData+x))<<endl;
     }
-    cout << "END!!!p" << endl;
+    //cout << "END!!!p" << endl;
 }
 
 UShort PureCode::GetMaxStack() {return max_stack;}
@@ -77,7 +77,7 @@ HexCode PureCode::GetNextCode() {
         return *(pData+(current_pos++));
     } catch (...) {
 #ifdef DEBUG_CLASS
-        cout << "1" << endl;
+        //cout << "1" << endl;
 #endif
     }
     return 0;
@@ -92,7 +92,7 @@ void PureCode::SetCurrentPos(UShort index) {
         current_pos = index;
     } catch (char *error_info) {
 #ifdef DEBUG_CLASS
-        cout << error_info << endl;
+        //cout << error_info << endl;
 #endif
     }
 }
@@ -110,7 +110,7 @@ HexCode PureCode::GetIndexCode(UShort index) const{
         return *(pData+index);
     } catch (char *error_info) {
 #ifdef DEBUG_CLASS
-        cout << error_info << endl;
+        //cout << error_info << endl;
 #endif
         return 0;
     }
@@ -131,9 +131,9 @@ UInt PureCodePool::Reserve(CODE* pCode) { // UInt _codeLength, UBytePtr _codeStr
         return 0;
     UInt reserved_slot = VacantIndexStack.top();
     VacantIndexStack.pop();
-    cout << reserved_slot << "!" << endl;
+    //cout << reserved_slot << "!" << endl;
     CodePool[reserved_slot] = new PureCode(pCode); //_codeLength, _codeString);
-    cout << "HAHA" << endl;
+    //cout << "HAHA" << endl;
     return reserved_slot;
 }
 
@@ -144,7 +144,7 @@ DataType PureCodePool::Access(UInt access_slot) {
         return CodePool[access_slot];
     } catch (char *error_info) {
 #ifdef DEBUG_CLASS
-        cout << error_info << endl;
+        //cout << error_info << endl;
 #endif
         return NULL;
     }        
@@ -208,16 +208,16 @@ MethodEntry::MethodEntry(METHODINFO* pmi, class_attribute* pkl) {
     descriptor = info.second;
 
     name_and_descriptor = name + ":" + descriptor; 
-    cout << name_and_descriptor << "NAT" << endl;
+    //cout << name_and_descriptor << "NAT" << endl;
 
     attribute_count = pmi->attributes_count;
-    cout << attribute_count << "attr_count" << endl;
-    cout << (CODE*)pmi->attributes[pmi->get_code_index()] << "[[[attr_count" << endl;
+    //cout << attribute_count << "attr_count" << endl;
+    //cout << (CODE*)pmi->attributes[pmi->get_code_index()] << "[[[attr_count" << endl;
 
     UInt  t = GenCodePool.Reserve((CODE*)pmi->attributes[pmi->get_code_index()]);
-    cout << t << endl;
+    //cout << t << endl;
     method_res_pos = t;
-    cout << "G" << endl;
+    //cout << "G" << endl;
 }
 
 NAT MethodEntry::GetName() {return name;}

@@ -10,6 +10,8 @@ using std::make_pair;
 using std::cout;
 using std::endl;
 
+//#define NONLOCALITY
+
 Object::Object(pClass *pkl, UInt len, UInt da, UInt size) {
     header = new ObjectHeader(len, da);
     this->pkl = pkl;
@@ -236,13 +238,19 @@ Object* MakeMultiArray(int length, int *arr, int d) {
         cookieTotal = totalSize;
         totalSize *= arr[i];
     }
+#ifndef NONLOCALITY
     char* data = (char*)heap->create_obj(totalSize * length + sizeof(int*) * cookieTotal);
+#endif
     //cout << "Create " << totalSize * length + sizeof(int*) * cookieTotal << "bytes" << endl;
     //*(unsigned long*)data = obj;
     if (d != 1) {
         obj->Set(NULL, sizeof(int*), d, arr[0]);
     } else {
+#ifndef NONLOCALITY
         obj->Set(NULL, length, d, arr[0], data);
+#else
+        obj->Set(NULL, length, d, arr[0]);
+#endif
     }
     int *revarr = new int[d];
     revarr[d-1] = 1;
@@ -271,7 +279,11 @@ Object* MakeMultiArray(int length, int *arr, int d) {
             } else {
                 ////cout << "hua dajb " << offset * length + (offset * sizeof(int*) / arr[dk-1]) << endl;
                 ////cout << "hua dajb " << offset * length << " " << offset << " .,. " << sizeof(int*) / arr[dk-1] << endl;
+#ifndef NONLOCALITY
                 ko->Set(NULL, length, d-dk-1, arr[dk+1], data + offset * length + (offset * sizeof(int*) / arr[d-1]));
+#else
+                ko->Set(NULL, length, d-dk-1, arr[dk+1]);
+#endif
                 handlerQ.push(make_pair(ko, make_pair(dk+1, offset)));
             }
             offset += revarr[dk];

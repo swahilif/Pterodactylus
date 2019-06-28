@@ -6,7 +6,7 @@
 // This class is mainly used for Heap Object Arrangement
 
 
-const int MAX_OBJECT_HANDLER_NUM = 100000;
+const int MAX_OBJECT_HANDLER_NUM = 10000000;
 using PObj = void *;
 
 class Object {

@@ -6,7 +6,6 @@
 #include "../include/runtime/HeapManager.hpp"
 #include <getopt.h>
 
-#define DEBUG
 
 /*
 static struct option long_options[] = {
@@ -43,11 +42,11 @@ StackFrame* set_new_stack_frame(MethodEntry* method, StackFrame* top){
 
 int parse_param(string type){
 #ifdef DEBUG
-    cout << type << endl;
+    //cout << type << endl;
 #endif
     int start_pos = type.find('(');
     int end_pos = type.find(')');
-    string params = type.substr(star    t_pos+1, end_pos-1);
+    string params = type.substr(start_pos+1, end_pos-1);
     int count = 0;
     int pos = 0;
     int length = params.length();
@@ -73,7 +72,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
     CodeCursor* cc = new CodeCursor(code, 0);
     uint code_length = code->GetCodeLength();
 #ifdef DEBUG
-    cout << "Code length: " << code_length << endl;
+    //cout << "Code length: " << code_length << endl;
 #endif
     int count = 0;
     uchar tmp;
@@ -113,7 +112,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             case (0x10):{
                 tmp = cc->GetNextCode();
 #ifdef DEBUG
-                cout << "Bipush " << int(tmp) << endl;
+                //cout << "Bipush " << int(tmp) << endl;
 #endif
                 thread_stack[++frame->stack_top] = long(tmp);
                 break;
@@ -165,7 +164,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             case (0x60):{
                 long res = thread_stack[frame->stack_top] + thread_stack[frame->stack_top-1];
 #ifdef DEBUG
-                cout << "add result:" << res << endl;
+                //cout << "add result:" << res << endl;
 #endif
                 thread_stack[--frame->stack_top] = res;
                 break;
@@ -179,7 +178,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // idiv
             case (0x6c):{
                 long res = thread_stack[frame->stack_top-1] / thread_stack[frame->stack_top];
-                cout << "div result:" << res << endl;
+                //cout << "div result:" << res << endl;
                 thread_stack[--frame->stack_top] = res;
                 break;
             }
@@ -192,10 +191,10 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // aaload
             case (0x32):{
                 int num = thread_stack[frame->stack_top--];
-                cout << "aaload, index: " << num;
+                //cout << "aaload, index: " << num;
                 Object* array = (Object*)thread_stack[frame->stack_top--];
                 Object* res = (Object*)array->getIndex(num, 'L');
-                cout << " Obj Address: " << (long)res << endl;
+                //cout << " Obj Address: " << (long)res << endl;
                 thread_stack[++frame->stack_top] = (long)res;
                 break;
             }
@@ -204,9 +203,9 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 int num = thread_stack[frame->stack_top--];
                 Object* array = (Object*)thread_stack[frame->stack_top--];
 #ifdef DEBUG
-                cout << "Array to get: " << (long)array << endl;
+                //cout << "Array to get: " << (long)array << endl;
 #endif
-                cout << "iaload, index: " << num << endl;
+                //cout << "iaload, index: " << num << endl;
                 int res = *(int*)(array->getIndex(num, 'I'));
                 thread_stack[++frame->stack_top] = res;
                 break;
@@ -302,7 +301,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 int index = thread_stack[frame->stack_top--];
                 Object* array = (Object*)thread_stack[frame->stack_top--];
                 array->putIndex(index, (char*)&num, 4);
-                cout << "Put number " << num << " into index " << index << " of array " << (long)array << endl;
+                //cout << "Put number " << num << " into index " << index << " of array " << (long)array << endl;
                 break;
             }
             // aastore
@@ -310,19 +309,19 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 Object* new_obj = (Object*)thread_stack[frame->stack_top--];
                 int index = thread_stack[frame->stack_top--];
                 Object* array = (Object*)thread_stack[frame->stack_top--];
-                cout << "AASTORE " << (long)new_obj << " into " << (long)array << endl;
+                //cout << "AASTORE " << (long)new_obj << " into " << (long)array << endl;
                 Object* tmp = (Object*)array->getIndex(index, 'L');
-                cout << "Double Check  new object: " << (long)tmp << endl;
+                //cout << "Double Check  new object: " << (long)tmp << endl;
                 array->putIndex(index, (char*)&new_obj, array->header->getLength());
                 tmp = (Object*)array->getIndex(index, 'L');
-                cout << "Triple Check  new object: " << (long)tmp << endl;
+                //cout << "Triple Check  new object: " << (long)tmp << endl;
                 break;
             }
             // astore [indexbyte]
             case (0x3a):{
                 tmp = cc->GetNextCode();
 #ifdef DEBUG
-                cout << "Slot index: " << int(tmp) << endl;
+                //cout << "Slot index: " << int(tmp) << endl;
 #endif
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+tmp];
                 if (old_obj != NULL&& frame->is_obj[tmp])
@@ -351,13 +350,13 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 if (old_obj != NULL && frame->is_obj[1]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
-                    cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
+                    //cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
 #endif
                 }
                 Object* new_obj = (Object*)thread_stack[frame->stack_top];
                 new_obj->header->changeCnt(1);
 #ifdef DEBUG
-                cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
+                //cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
 #endif
                 thread_stack[frame->local_variable_table+1] = thread_stack[frame->stack_top];
                 frame->stack_top--;
@@ -370,13 +369,13 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 if (old_obj != NULL&& frame->is_obj[2]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
-                    cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
+                    //cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
 #endif
                 }
                 Object* new_obj = (Object*)thread_stack[frame->stack_top];
                 new_obj->header->changeCnt(1);
 #ifdef DEBUG
-                cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
+                //cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
 #endif
                 thread_stack[frame->local_variable_table+2] = thread_stack[frame->stack_top];
                 frame->stack_top--;
@@ -386,17 +385,17 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             // astore_3
             case (0x4e):{
                 Object* old_obj = (Object*)thread_stack[frame->local_variable_table+3];
-                cout << "Address of the old object: " << (long)old_obj << endl;
+                //cout << "Address of the old object: " << (long)old_obj << endl;
                 if (old_obj != NULL && frame->is_obj[3]){
                     old_obj->header->changeCnt(-1);
 #ifdef DEBUG
-                    cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
+                    //cout << "Old object got replaced! Its new count is: " << old_obj->header->getCount() << endl;
 #endif
                 }
                 Object* new_obj = (Object*)thread_stack[frame->stack_top];
                 new_obj->header->changeCnt(1);
 #ifdef DEBUG
-                cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
+                //cout << "New object " << (long)new_obj << " got updated! Its new count is: " << new_obj->header->getCount() << endl;
 #endif
                 thread_stack[frame->local_variable_table+3] = thread_stack[frame->stack_top];
                 frame->stack_top--;
@@ -443,7 +442,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op == 0)
                     cc->Jump(offset-3);
@@ -454,7 +453,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op != 0)
                     cc->Jump(offset-3);
@@ -465,7 +464,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op < 0)
                     cc->Jump(offset-3);
@@ -476,7 +475,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op <= 0)
                     cc->Jump(offset-3);
@@ -487,7 +486,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op > 0)
                     cc->Jump(offset-3);
@@ -498,7 +497,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op = thread_stack[frame->stack_top--];
                 if(op >= 0)
                     cc->Jump(offset-3);
@@ -509,7 +508,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
@@ -522,7 +521,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
@@ -535,7 +534,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
@@ -548,7 +547,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
@@ -561,7 +560,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 int op1 = thread_stack[frame->stack_top-1];
                 int op2 = thread_stack[frame->stack_top];
                 frame->stack_top -= 2;
@@ -574,11 +573,11 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 long op2 = (long)thread_stack[frame->stack_top--];
                 long op1 = (long)thread_stack[frame->stack_top--];
 #ifdef DEBUG
-                cout << "Comparing two numbers " << op1 << " and " << op2 << endl;
+                //cout << "Comparing two numbers " << op1 << " and " << op2 << endl;
 #endif
                 if (op1 >= op2)
                     cc->Jump(offset-3);
@@ -589,19 +588,19 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 uchar byte1 = cc->GetNextCode();
                 uchar byte2 = cc->GetNextCode();
                 short offset = (short)( (((ushort)byte1) << 8) + (ushort)byte2);
-                cout << "offset: " << offset << endl;
+                //cout << "offset: " << offset << endl;
                 //frame->stack_top -= 2;
                 cc->Jump(offset-3);
                 break;
             }
             // ireturn
             case (0xac):{
-                cout << "Return Value: " << thread_stack[frame->stack_top] << endl;
+                //cout << "Return Value: " << thread_stack[frame->stack_top] << endl;
                 for (int i = 0; i < frame->max_locals; i ++){
                     if (frame->is_obj[i]){
 
-                        cout << "Local Var " << i << " is obj." << endl;
-                        cout << "Address: " << thread_stack[frame->local_variable_table+i] << endl;
+                        //cout << "Local Var " << i << " is obj." << endl;
+                        //cout << "Address: " << thread_stack[frame->local_variable_table+i] << endl;
                         ((Object*)thread_stack[frame->local_variable_table+i])->header->changeCnt(-1);
                     }
                 }
@@ -626,8 +625,8 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
             case (0xb1):{
                 for (int i = 0; i < frame->max_locals; i ++){
                     if (frame->is_obj[i]){
-                        cout << "Local Var " << i << " is obj." << endl;
-                        cout << "Address: " << thread_stack[frame->local_variable_table+i] << endl;
+                        //cout << "Local Var " << i << " is obj." << endl;
+                        //cout << "Address: " << thread_stack[frame->local_variable_table+i] << endl;
                         ((Object*)thread_stack[frame->local_variable_table+i])->header->changeCnt(-1);
                     }
                 }
@@ -642,11 +641,11 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 string class_name = *(string*)item->GetValue();
                 //class_name = class_name + ".class";
 #ifdef DEBUG
-                cout << class_name << endl;
+                //cout << class_name << endl;
 #endif
                 if (class_name == "java/util/Scanner"){
                     class_name = "Scanner";
-                    cout << "Scanner Loaded!" << endl;
+                    //cout << "Scanner Loaded!" << endl;
                 }
                 pClass* new_class = ClassLoader::findLoadedClass(class_name);
                 if (!new_class){
@@ -656,21 +655,21 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 }
                 uint len = new_class->GetByte();
 #ifdef DEBUG
-                cout << "Length of the new obj: " << len << endl;
+                //cout << "Length of the new obj: " << len << endl;
 #endif
                 //Object* new_obj = new Object(new_class, len);
                 bool succeed = heap->check_space(len);
                 if (!succeed){
-                    cout << "Out Of Memory!" << endl;
+                    //cout << "Out Of Memory!" << endl;
                     exit(0);
                 }
                 Object* new_obj = requestObject();
                 new_obj->Set(new_class, len);
-                cout << "Initial Count: " << new_obj->header->getCount() << endl;
+                //cout << "Initial Count: " << new_obj->header->getCount() << endl;
                 frame->stack_top++;
                 thread_stack[frame->stack_top] = (ulong)new_obj;
 #ifdef DEBUG
-                cout << "Address: " << (ulong)new_obj << endl;
+                //cout << "Address: " << (ulong)new_obj << endl;
 #endif
                 break;
             }
@@ -687,13 +686,13 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                     total_size += 8;
                     bool succeed = heap->check_space(total_size);
                     if (!succeed){
-                        cout << "Out Of Memory!" << endl;
+                        //cout << "Out Of Memory!" << endl;
                         exit(0);
                     }
                     Object* array = MakeMultiArray(4, dim, 1);
                     thread_stack[++frame->stack_top] = (ulong)array;
 #ifdef DEBUG
-                    cout << "New INT array created. Address: " << (ulong)array << endl;
+                    //cout << "New INT array created. Address: " << (ulong)array << endl;
 #endif
                 }
                 break;
@@ -706,7 +705,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 //item -> resolved(cl->pcp);
                 string class_name = *(string*)item->GetValue();
 #ifdef DEBUG
-                cout << "Created a new array of type: " << class_name << endl;
+                //cout << "Created a new array of type: " << class_name << endl;
 #endif
                 pClass* new_class = ClassLoader::findLoadedClass(class_name);
                 if (!new_class){
@@ -729,8 +728,8 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 int product = 1;
                 int total_size = 8;
 #ifdef DEBUG
-                cout << "DIM: " << dim << endl;
-                cout << "index: " << index << endl;
+                //cout << "DIM: " << dim << endl;
+                //cout << "index: " << index << endl;
 #endif
                 int* dimensions = new int[dim];
                 int cur_dim = 0;
@@ -746,7 +745,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(index);
                 //item -> resolved(cl->pcp);
                 string full_name = *(string*)item->GetValue();
-                cout << "Full Name: " << full_name << endl;
+                //cout << "Full Name: " << full_name << endl;
                 char type;
                 int pos = 0;
                 int length = full_name.length();
@@ -762,22 +761,22 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                     total_size += product * 4 + product / dimensions[dim-1] * 8;
                     bool succeed = heap->check_space(total_size);
                     if (!succeed){
-                        cout << "Out Of Memory!" << endl;
+                        //cout << "Out Of Memory!" << endl;
                         exit(0);
                     }
                     Object* array = MakeMultiArray(4, dimensions, dim);
                     thread_stack[++frame->stack_top] = (ulong)array;
-                    cout << "TOTAL SIZE: " << total_size << endl;
+                    //cout << "TOTAL SIZE: " << total_size << endl;
                     
 #ifdef DEBUG
-                    cout << "New Multi-dimensional INT array created. Address: " << (ulong)array << endl;
+                    //cout << "New Multi-dimensional INT array created. Address: " << (ulong)array << endl;
 #endif
                 }
                 else if (type == 'L'){
                     total_size += product * 4 + product / dimensions[dim-1] * 8;
                     string class_name = full_name.substr(pos+1, full_name.length()-pos-2);
 #ifdef DEBUG
-                    cout << "Created a new array of type: " << class_name << endl;
+                    //cout << "Created a new array of type: " << class_name << endl;
 #endif
                     pClass* new_class = ClassLoader::findLoadedClass(class_name);
                     if (!new_class){
@@ -788,7 +787,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                     Object* array = MakeMultiObjectArray(new_class, dimensions, dim);
                     thread_stack[++frame->stack_top] = (ulong)array;
 #ifdef DEBUG
-                    cout << "New Multi-dimensional Object array created. Address: " << (ulong)array << endl;
+                    //cout << "New Multi-dimensional Object array created. Address: " << (ulong)array << endl;
 #endif
                 }
                 break;
@@ -800,7 +799,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp);
                 //item -> resolved(cl->pcp);
                 string full_name = item->GetNameAndType();
-                cout << "Full Name: " << full_name << endl;
+                //cout << "Full Name: " << full_name << endl;
                 if (full_name == "java/lang/System.out:Ljava/io/PrintStream;"){
                     //thread_stack[++frame->stack_top] = 1234;
                     break;
@@ -829,8 +828,8 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 ulong pos = full_name.find('.');
                 string nat = full_name.substr(pos+1, full_name.length() - pos);
 #ifdef DEBUG
-                cout << "NAT: " << nat << endl;
-                cout << "OBJ Address: " << thread_stack[frame->stack_top] << endl;
+                //cout << "NAT: " << nat << endl;
+                //cout << "OBJ Address: " << thread_stack[frame->stack_top] << endl;
 #endif
                 ulong type_pos = nat.find(':');
                 string type = nat.substr(type_pos+1, nat.length() - type_pos);
@@ -856,8 +855,8 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 ulong type_pos = nat.find(':');
                 string type = nat.substr(type_pos+1, nat.length() - type_pos);
                 ulong value = thread_stack[frame->stack_top];
-                cout << "TYPE: " << type << endl;
-                cout << "VALUE: " << value << endl;
+                //cout << "TYPE: " << type << endl;
+                //cout << "VALUE: " << value << endl;
                 Object *obj = reinterpret_cast<Object*>(thread_stack[frame->stack_top-1]);
                 if (type[0] == 'I'){
                     obj->putField(nat, (char*)&value, 4);
@@ -867,7 +866,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 else if (type[0] == 'L'){
                     obj->putField(nat, (char*)&value, 8);
                     Object* tmp = (Object*)*(long*)(obj->getField(nat));
-                    cout << "check: " << (long)tmp << " raw: " << thread_stack[frame->stack_top] << endl;
+                    //cout << "check: " << (long)tmp << " raw: " << thread_stack[frame->stack_top] << endl;
                 }
                 frame->stack_top -= 2;
                 break;
@@ -879,28 +878,28 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 ConstantPoolMetaType* item = cl->GetConstantPoolItem(tmp); // MethodInfo
                 string full_name = item->GetNameAndType();
                 if (full_name == "java/io/PrintStream.println:(I)V"){
-                    cout << (long)thread_stack[frame->stack_top--] << endl;
+                    //cout << (long)thread_stack[frame->stack_top--] << endl;
                     break;
                 }
                 else if (full_name == "java/util/Scanner.nextInt:()I"){
 
-                    cout << "Input Called!" << endl;
+                    //cout << "Input Called!" << endl;
                     int in_num;
                     cin >> in_num;
                     thread_stack[frame->stack_top] = in_num;
                     break;
                 }
-                cout << full_name << endl;
+                //cout << full_name << endl;
                 ulong pos = full_name.find('.');
                 string nat = full_name.substr(pos+1, full_name.length() - pos + 1);
                 ulong type_pos = nat.find(':');
                 string type = nat.substr(type_pos+1, nat.length() - type_pos);
                 int param_count = parse_param(type);
 #ifdef DEBUG
-                cout << "Param COUNT: " << param_count << endl;
+                //cout << "Param COUNT: " << param_count << endl;
 #endif
                 Object *obj = (Object*)thread_stack[frame->stack_top-param_count];
-                cout << "Address: " << (ulong)obj << endl;
+                //cout << "Address: " << (ulong)obj << endl;
                 // TO BE MODIFIED
                 pClass* new_cl = obj->getClass();
                 if (!new_cl){
@@ -911,7 +910,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 StackFrame* new_frame = set_new_stack_frame(new_method, frame);
                 for (int j = 0; j < param_count + 1; j ++){
 #ifdef DEBUG
-                    cout << "Param " << j << " : " << thread_stack[frame->stack_top-param_count+j] << endl;
+                    //cout << "Param " << j << " : " << thread_stack[frame->stack_top-param_count+j] << endl;
 #endif
                     thread_stack[new_frame->local_variable_table+j] = thread_stack[frame->stack_top-param_count+j];
                 }
@@ -936,17 +935,17 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 string full_name = item->GetNameAndType();
                 ulong pos = full_name.find('.');
                 string class_name = full_name.substr(0, pos);
-                cout << full_name[pos] << endl;
-                cout << "Class name: " << class_name << endl;
+                //cout << full_name[pos] << endl;
+                //cout << "Class name: " << class_name << endl;
                 pClass* new_cl = ClassLoader::findLoadedClass(class_name);
                 pClass* dau_cl = ClassLoader::findLoadedClass("daughter");
 #ifdef DEBUG
-                cout << "Father Add: " << (long)new_cl << " Daughter Add: " << (long)dau_cl << endl;
-                cout << "New cl: " << (long)new_cl << " Old cl: " << (long)cl << endl;
+                //cout << "Father Add: " << (long)new_cl << " Daughter Add: " << (long)dau_cl << endl;
+                //cout << "New cl: " << (long)new_cl << " Old cl: " << (long)cl << endl;
 #endif
                 string nat = full_name.substr(pos+1, full_name.length() - pos + 1);
 #ifdef DEBUG
-                cout << "Nat: " << nat << endl;
+                //cout << "Nat: " << nat << endl;
 #endif
                 ulong type_pos = nat.find(':');
                 string type = nat.substr(type_pos+1, nat.length() - type_pos);
@@ -954,7 +953,7 @@ void interpret(MethodEntry* method, pClass* cl, StackFrame* frame, ulong* thread
                 MethodEntry* new_method = new_cl->GetStaticMethod(nat);
                 StackFrame* new_frame = set_new_stack_frame(new_method, frame);
                 for (int j = 0; j < param_count; j ++){
-                    cout << "Params: " << thread_stack[frame->stack_top+1-param_count+j] << endl;
+                    //cout << "Params: " << thread_stack[frame->stack_top+1-param_count+j] << endl;
                     thread_stack[new_frame->local_variable_table+j] = thread_stack[frame->stack_top+1-param_count+j];
                 }
                 frame->stack_top -= param_count;
@@ -984,17 +983,17 @@ int main(int argc, char **argv){
             temp_char = k;
             break;
         }
-    cout << test.substr(0, temp_char+1) << endl;
+    //cout << test.substr(0, temp_char+1) << endl;
     ClassLoader::SetPath(test.substr(0, temp_char+1));
 #ifdef DEBUG
-    cout << "==================" << endl;
+    //cout << "==================" << endl;
 #endif
     ClassLoader::LoadClass(argv[1]);
 #ifdef DEBUG
-    cout << "==================" << endl;
+    //cout << "==================" << endl;
 #endif
     string tmp = string(path).substr(temp_char+1, 999);
-    cout  << tmp.substr(0, tmp.length()-6) << endl;
+    //cout  << tmp.substr(0, tmp.length()-6) << endl;
     pClass* main_class = ClassLoader::findLoadedClass(tmp.substr(0, tmp.length()-6));
     MethodEntry* main_method;
     for(int i = 0; i < main_class->method_count; i ++){

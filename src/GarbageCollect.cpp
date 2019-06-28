@@ -24,33 +24,33 @@ void dfs(Object* cur){
         tmp->header->marked = 1;
         if (tmp->header->dArr){
 #ifdef DEBUG
-            cout << "It is an array object, value array excluded." << endl;
+            //cout << "It is an array object, value array excluded." << endl;
 #endif
             if (tmp->header->dArr == 1 && tmp->getClass() == NULL)
                 continue;
             for (int i = 0; i < tmp->size; i ++){
                 Object* attr = (Object*)tmp->getIndex(i, 'L');
-                cout << "SubArray " << (long)attr << " marked." << endl;
+                //cout << "SubArray " << (long)attr << " marked." << endl;
                 st.push(attr);
             }
         }
         else{
             /*这里应取出tmp对应的pclass里的bool数组并把所有指向handler的指针压栈。此处注意判定marked是否为1*/
-            cout << "It is a normal object or value array." << endl;
+            //cout << "It is a normal object or value array." << endl;
             FieldEntry** pF = tmp->getClass()->arrField;
             for (int i = 0; i < tmp->getClass()->field_count; i ++){
     #ifdef DEBUG
-                cout << "During DFS: field " << i << endl;
+                //cout << "During DFS: field " << i << endl;
     #endif
                 if (pF[i]->isObject()){
                     string nat = pF[i]->GetNameAndDescriptor();
     #ifdef DEBUG
-                    cout << "Attribute " << i << " is object, its name is " << nat << endl;
+                    //cout << "Attribute " << i << " is object, its name is " << nat << endl;
     #endif
                     void* ptr = tmp->getField(nat);
                     Object* attr = (Object*)*(long*)ptr;
     #ifdef DEBUG
-                    cout << "Get field succeed! Its address is " << (long)attr << endl;
+                    //cout << "Get field succeed! Its address is " << (long)attr << endl;
     #endif
                     if (attr && !attr->header->marked)
                         st.push(attr);
@@ -68,8 +68,8 @@ void GC_mark(Object* folink, Heap* heap){
     Object* cur = folink;
     while (cur != NULL){
 #ifdef DEBUG
-        cout << "Traverse handler " << (long)cur << " ! Its count is:" << cur->header->getCount();
-        cout << " Pos in Heap: " << (long)(cur->getData()) - 8 - heap->start << endl;
+        //cout << "Traverse handler " << (long)cur << " ! Its count is:" << cur->header->getCount();
+        //cout << " Pos in Heap: " << (long)(cur->getData()) - 8 - heap->start << endl;
 #endif
         if (cur->header->getCount() > 0)
             dfs(cur);
@@ -85,9 +85,9 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
     ulong length;
     while(1){
         void* data = heap->get_object(pos);
-        cout << "Now offset: " << pos << endl;
+        //cout << "Now offset: " << pos << endl;
         Object* obj = (Object*)(*(ulong*)data);
-        cout << "obj " << (long)obj << endl;
+        //cout << "obj " << (long)obj << endl;
         if ((long)obj == 0)
             break;
         if (obj->header->dArr == 0){
@@ -98,12 +98,12 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
         }
 
 #ifdef DEBUG
-        cout << "obj " << (long)obj << " Its length is: " << length;
+        //cout << "obj " << (long)obj << " Its length is: " << length;
 #endif
         bool marked = obj->header->marked;
         if (marked){
 #ifdef DEBUG
-            cout << " It is kept." << endl;
+            //cout << " It is kept." << endl;
 #endif
             memcpy((void*)(heap->Survivor_offset + heap->Survivor), (const void*)(pos + heap->Eden), length + 8);
             obj->changeData((void*)(heap->Survivor_offset + heap->Survivor + 8));
@@ -111,7 +111,7 @@ void GC_sweep(Heap* heap, ulong last_obj_length){
         }
         else{
 #ifdef DEBUG
-            cout << " It is swepted." << endl;
+            //cout << " It is swepted." << endl;
 #endif
             releaseObject(obj);
 

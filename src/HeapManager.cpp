@@ -27,12 +27,12 @@ Heap::Heap(ulong length){
 void* Heap::create_obj(ulong length){
     uchar* point = Eden + Eden_offset;
     Eden_offset += length;
-    cout << length << " bits required! Current ptr pos: " << Eden_offset << endl;
-    cout << "Required Heap Length: " << length << endl;
-    cout << "Current Pos: " << Eden_offset << endl;
+    //cout << length << " bits required! Current ptr pos: " << Eden_offset << endl;
+    //cout << "Required Heap Length: " << length << endl;
+    //cout << "Current Pos: " << Eden_offset << endl;
     /*
     if (Eden_offset > max_heap_size){
-        cout << "Garbage Collection triggered!" << endl;
+        //cout << "Garbage Collection triggered!" << endl;
         GC_mark(folink, heap);
         GC_sweep(heap);
     }
@@ -41,9 +41,9 @@ void* Heap::create_obj(ulong length){
 }
 
 bool Heap::check_space(ulong length){
-    cout << "Eden offset: " << Eden_offset << endl;
+    //cout << "Eden offset: " << Eden_offset << endl;
     if (Eden_offset + length + 8 >= max_heap_size){
-        cout << "Garbage Collection triggered!" << endl;
+        //cout << "Garbage Collection triggered!" << endl;
         GC_mark(folink, heap);
         GC_sweep(heap, length + 8);
         if (Eden_offset + length + 8 >= max_heap_size)

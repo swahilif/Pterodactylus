@@ -10,17 +10,19 @@ public class loc1{
 	public static void main(String[] args){
 		test[][] array = new test[1000][1000];
 		int[] b;
+		/*
 		for (int i = 0; i < 1000; i ++){
 			for( int j = 0; j < 1000; j ++){
 				array[i][j] = new test();
 				b = new int[5];
 			}
 		}
-		/*
-		for (int k = 0; k < 1; k ++)
+		*/
+		int s;
+		for (int k = 0; k < 0; k ++)
 			for(int i = 0; i < 1000; i ++)
 				for(int j = 0; j < 1000; j ++)
-					array[i][j].num = 2;
-		*/
+					array[i][j].fuck(i, j, k);
+					//s = 1;
 	}
 }
